@@ -1,4 +1,4 @@
-import { totalmem } from "node:os";
+
 
 interface pedidoServicoType {
     cliente: string;
@@ -14,7 +14,6 @@ let total: number = 0;
 
     total = (pedido.horasEstimadas * precoHora ) 
 
-    pedido.urgente ? total *= taxaUrgencia : total
+ 
 
-    return total
 }
