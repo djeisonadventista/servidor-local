@@ -8,6 +8,8 @@ interface ServicoType {
 
 let catalogoServicos: ServicoType[] = [];
 
+//adicionar um servico novo
+
 export function adicionarServico(novoServico: ServicoType) {
 
     if (!novoServico.nome) {
@@ -34,4 +36,35 @@ export function adicionarServico(novoServico: ServicoType) {
     };
 }
 
+//listar todos os servicos
+export function listarServicos(): ServicoType[] {
+    // TODO: implementar paginação e filtros
+    return catalogoServicos;
+}
 
+
+//apagar um serviço
+export function apagarServico(nomeServico: string): boolean {
+    //TODO: implementar função de apagar serviço
+
+const novoCatalogoTemporario: ServicoType[] = [];
+
+    for (let i = 0; i < catalogoServicos.length; i++) {
+        if (catalogoServicos[i]?.nome !== undefined && catalogoServicos[i]?.nome !== nomeServico) {
+            novoCatalogoTemporario.push(catalogoServicos[i]!);
+        }
+    } // devolve um novo catalogo sem o serviço que foi apagado
+
+    catalogoServicos = novoCatalogoTemporario;
+    return true;
+}
+
+//obter um serviço específico pelo nome
+export function obterServico(nomeServico: string): ServicoType | null {
+    for (let i = 0; i < catalogoServicos.length; i++) {
+        if (catalogoServicos[i]?.nome === nomeServico) {
+            return catalogoServicos[i]!;
+        }
+    }
+    return null;
+}
