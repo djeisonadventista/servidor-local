@@ -1,6 +1,6 @@
 import express, { type Request, type Response } from "express";
 import { adicionarServico, apagarServico, listarServicos, obterServico } from "./servico.js";
-import { calcularOrcamento , selecionarServico } from "./orcamento.js";
+import { calcularOrcamento, selecionarServico } from "./orcamento.js";
 const app = express();
 app.use(express.json());
 
@@ -56,16 +56,19 @@ app.get("/obter-servico", (req: Request, res: Response) => {
 
 //rota para selecionar servico
 app.post("/selecionar-servico", (req: Request, res: Response) => {
-    const {nome} = req.body;
+    const { nome } = req.body;
     const selecionarServicoResponse = selecionarServico(nome as string);
     res.json(selecionarServicoResponse);
 })
 
 //rota para calcular orçamento
 app.post("/calcular-orcamento", (req: Request, res: Response) => {
-    const pedido = req.body;
+    const { pedido } = req.body;
     const calcularOrcamentoResponse = calcularOrcamento(pedido);
-    res.json(calcularOrcamentoResponse);
+    res.json({
+        message: "Orcamento calculado com sucesso!",
+        orcamentoTotal: calcularOrcamentoResponse
+    });
 })
 
 app.listen(8080, () => {
