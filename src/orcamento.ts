@@ -1,4 +1,4 @@
-import { stat } from "node:fs";
+
 import { catalogoServicos } from "./servico.js";
 import { type pedidoServicoType, type PrestadorType, type ServicoType } from "./utils/types.js";
 
@@ -21,6 +21,36 @@ export function selecionarServico(nomeServico: string) {
     return false
 }
 
+
+
+
+// funcao para selecionar prestador de servico pelo nome
+export function selecionarPrestador(nomePrestador: string) {
+
+    // verificar se o prestador existe
+    for (let i = 0; i < prestadorDeServico.length; i++) {
+        if (prestadorDeServico[i]?.nome === nomePrestador) {
+
+            // se existir, adicionar na lista de selecionados
+            prestadoresSelecionados.push(prestadorDeServico[i]!);
+
+            return { 
+                status: true, 
+                message: "Prestador selecionado com sucesso!", 
+                data: prestadorDeServico[i] 
+            };
+        }
+    }
+
+    // se nao existir
+    return { 
+        status: false, 
+        message: "Prestador não encontrado!", 
+        data: null 
+    };
+}
+
+
 //funcao para criar prestador de serviço
 export function criarPrestadorDeServico(novoPrestador: PrestadorType) {
     //verificar se o prestador ja esta no array
@@ -35,6 +65,7 @@ export function criarPrestadorDeServico(novoPrestador: PrestadorType) {
     prestadorDeServico.push(novoPrestador);
     return { status: true, message: "Prestador de servico adicionado com sucesso!", data: novoPrestador }
 }
+
 
 //funcao para calculara o orcamento
 export function calcularOrcamento(pedido: pedidoServicoType) {
@@ -80,3 +111,5 @@ export function calcularOrcamento(pedido: pedidoServicoType) {
  
     */
 }
+
+

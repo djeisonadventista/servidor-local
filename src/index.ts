@@ -1,6 +1,6 @@
 import express, { type Request, type Response } from "express";
 import { adicionarServico, apagarServico, listarServicos, obterServico } from "./servico.js";
-import { calcularOrcamento, selecionarServico } from "./orcamento.js";
+import { calcularOrcamento, criarPrestadorDeServico, selecionarPrestador, selecionarServico } from "./orcamento.js";
 const app = express();
 app.use(express.json());
 
@@ -58,8 +58,30 @@ app.get("/obter-servico", (req: Request, res: Response) => {
 app.post("/selecionar-servico", (req: Request, res: Response) => {
     const { nome } = req.body;
     const selecionarServicoResponse = selecionarServico(nome as string);
-    res.json(selecionarServicoResponse);
+    res.json({ selecionarServicoResponse });
 })
+
+
+//rota para selecionar prestador de servico pelo nome
+app.post("/selecionar-prestador", (req: Request, res: Response) => {
+    const { nome } = req.body;
+    const selecionarPrestadorResponse = selecionarPrestador(nome as string);
+    res.json({
+        status: selecionarPrestadorResponse,
+        message: "Prestador selecionado com sucesso!"
+    });
+})
+
+
+//Rota para criar prestador de serviço
+app.post("/criar-prestador", (req: Request, res: Response) => {
+    const novoPrestador = req.body;
+    const criarPrestadorResponse = criarPrestadorDeServico(novoPrestador);
+    res.json(criarPrestadorResponse);
+})
+
+
+
 
 //rota para calcular orçamento
 app.post("/calcular-orcamento", (req: Request, res: Response) => {
