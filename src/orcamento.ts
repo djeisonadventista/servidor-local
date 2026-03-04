@@ -34,19 +34,19 @@ export function selecionarPrestador(nomePrestador: string) {
             // se existir, adicionar na lista de selecionados
             prestadoresSelecionados.push(prestadorDeServico[i]!);
 
-            return { 
-                status: true, 
-                message: "Prestador selecionado com sucesso!", 
-                data: prestadorDeServico[i] 
+            return {
+                status: true,
+                message: "Prestador selecionado com sucesso!",
+                data: prestadorDeServico[i]
             };
         }
     }
 
     // se nao existir
-    return { 
-        status: false, 
-        message: "Prestador não encontrado!", 
-        data: null 
+    return {
+        status: false,
+        message: "Prestador não encontrado!",
+        data: null
     };
 }
 
@@ -65,6 +65,124 @@ export function criarPrestadorDeServico(novoPrestador: PrestadorType) {
     prestadorDeServico.push(novoPrestador);
     return { status: true, message: "Prestador de servico adicionado com sucesso!", data: novoPrestador }
 }
+
+
+//funcao para editar um prestador de serviço
+export function editarPrestadorDeServico(nomePrestador: string, novoDadosDoPrestador: PrestadorType) {
+    //encontrar o prestador de servico  a editar na minha lista
+    //ciclo que percorre  a lista e verifica o nome do prestador de serviço
+    prestadorDeServico.map((prestadorExistente: PrestadorType) => {
+        if (prestadorExistente.nome === nomePrestador) {
+            prestadorExistente.nome = novoDadosDoPrestador.nome;
+            prestadorExistente.precoHora = novoDadosDoPrestador.precoHora;
+            prestadorExistente.profissao = novoDadosDoPrestador.profissao;
+            prestadorExistente.minimoParaDesconto = novoDadosDoPrestador.minimoParaDesconto;
+            prestadorExistente.percentagemDesconto = novoDadosDoPrestador.percentagemDesconto;
+            prestadorExistente.taxaUrgencia = novoDadosDoPrestador.taxaUrgencia;
+
+            return { status: true, message: "Prestador de serviço editado com sucesso!", data: prestadorExistente }
+        }
+    })
+    // se nao nao existir nenhum prestador com o nome recebido , retorna uma mensagem de erro
+    return { status: false, message: "Prestador de serviço não encontrado!", data: null }
+}
+
+
+/*
+ //prestadorDeServico.replace()
+
+//funcao para apagar um prestador de serviço
+export function apagarPrestadorDeServico(nomePrestador: string) {
+   //encontrar o prestador de serviço a apagar na minha lista
+
+   //ciclo para percorrer a lista de prestadores de serviço e mostrar os seus dados
+    for (let i = 0; i < prestadorDeServico.length; i++) {
+
+//if para verificar se onome do prestador for igual ao nome recebido, 
+        if (prestadorDeServico[i]?.nome === nomePrestador) {
+
+ //se encontrado, remover o prestador
+            prestadorDeServico.splice(i, 1);
+
+//retornar mensagem de sucesso
+            return {
+                status: true,
+                message: "Prestador removido com sucesso!",
+                data: null
+            };
+        }
+    }
+
+ //se nao existir nenhum prestador com o nome recebido, retorna mensagem de erro
+    return {
+        status: false,
+        message: "Prestador não encontrado!",
+        data: null
+    };
+}
+
+  */
+
+export function listarPrestadoresDeServico() {
+    return prestadorDeServico;
+}
+
+//funcao para obter um prestador de serviço pelo nome
+export function apagarPrestadorDeServico(nomePrestador: string) {
+
+
+    /*
+    for (let i = 0; i < prestadorDeServico.length; i++) {
+
+        if (prestadorDeServico[i]?.nome === nomePrestador) {
+
+            return {
+                status: true,
+                message: "Prestador encontrado!",
+                data: prestadorDeServico[i]
+            };
+        }
+    }
+
+    return {
+        status: false,
+        message: "Prestador não encontrado!",
+        data: null
+    };
+}
+
+*/
+
+    // validacao do nome do prestador
+    if (nomePrestador === "") {
+        // se o prestador ja existe, retorna uma mensagem de erro
+        return {
+            status: false,
+            message: " Nome do prestadoe é obrigatorio",
+            data: null
+        }
+    }
+
+    const prestadorExiste = prestadorDeServico.some((prestadorExistente: PrestadorType) => prestadorExistente.nome === nomePrestador);
+    if (!prestadorExiste) {
+        return {
+            status: false,
+            message: "Nao existe nenhum prestador de servico com esse nome",
+            data: null
+        }
+    }
+
+
+    prestadorDeServico.filter((prestadorExistente: PrestadorType) => prestadorExistente.nome !== nomePrestador)
+
+
+    return {
+        status: true,
+        message: "Prestador removido com sucesso!",
+        data: prestadorDeServico
+    }
+}
+
 
 
 //funcao para calculara o orcamento
