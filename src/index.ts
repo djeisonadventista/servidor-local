@@ -84,17 +84,15 @@ app.post("/criar-prestador", (req: Request, res: Response) => {
 //Rota para editar prestador de serviço
 app.put("/editar-prestador", (req: Request, res: Response) => {
     const { nomePrestador, novosDadosDoPrestador } = req.body;
-    const editarPrestadorResponse = editarPrestadorDeServico(nomePrestador as string, novosDadosDoPrestador );
+    const editarPrestadorResponse = editarPrestadorDeServico(nomePrestador as string, novosDadosDoPrestador);
     res.json(editarPrestadorResponse);
 });
 
 //Rota para apagar prestador de serviço
 app.delete("/apagar-prestador", (req: Request, res: Response) => {
     const { nomePrestador } = req.query;
-    if (nomePrestador) {
     const apagarPrestadorResponse = apagarPrestadorDeServico(nomePrestador as string);
     res.json(apagarPrestadorResponse);
-    }
 });
 
 
