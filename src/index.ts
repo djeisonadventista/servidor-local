@@ -1,6 +1,8 @@
 import express, { type Request, type Response } from "express";
 import { adicionarServico, apagarServico, listarServicos, obterServico } from "./servico.js";
 import { apagarPrestadorDeServico, calcularOrcamento, criarPrestadorDeServico, editarPrestadorDeServico, selecionarPrestador, selecionarServico } from "./orcamento.js";
+import { createUser, getUserById, getUsers } from "./users.js";
+import { stat } from "node:fs";
 const app = express();
 app.use(express.json());
 
@@ -105,6 +107,90 @@ app.post("/calcular-orcamento", (req: Request, res: Response) => {
         orcamentoTotal: calcularOrcamentoResponse
     });
 })
+
+//selecionar todos os utilizadores presentes na base de dados
+app.get("/get-users", async (req: Request, res: Response) => {
+    const getUsersResponse = await getUsers();
+    res.json(getUsersResponse);
+});
+
+// selecionar um utilizador específico pelo id
+app.get("/get-user-id", async (req: Request, res: Response) => {
+    const { id } = req.query;
+    if (id) {
+        const getUserByIdResponse = await getUserById(id as string);
+
+if (!getUserByIdResponse) {
+    res.status(404).json({
+        status: "error",
+        message: "Utilizador nao encontrado",
+        data: null
+    })
+}
+
+
+res.status(200).json({
+    status: "success",
+    message: " Utilizador encontrado com sucesso!",
+    data: getUserByIdResponse
+})
+
+        res.json(getUserByIdResponse);
+    } else {
+        res.json({
+            mensagem: "ID do utilizador é obrigatório."
+        });
+    }
+});
+
+
+
+
+// Rota para inserir um novo utilizador na base de dados
+app.get("/create-user", async (req: Request, res: Response) => {
+
+    const {
+        id,
+        nome,
+        numero_identidade,
+        data_nascimento,
+        email,
+        password,
+        telefone,
+        pais,
+        localidade
+    } = req.query;
+
+    if (id && nome && email && password) {
+
+        const createUserResponse = await createUser(
+            id as string,
+            nome as string,
+            numero_identidade as string,
+            data_nascimento as string,
+            email as string,
+            password as string,
+            telefone as string,
+            pais as string,
+            localidade as string
+        );
+
+        res.json(createUserResponse);
+
+    } else {
+
+        res.json({
+            mensagem: "Dados do utilizador são obrigatórios."
+        });
+
+    }
+
+});
+
+
+
+
+
 
 app.listen(8080, () => {
     console.log("Servidor rodando na porta 8080");

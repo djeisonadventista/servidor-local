@@ -32,7 +32,7 @@ nome VARCHAR(50) NOT NULL,
 `email` VARCHAR (100) NOT NULL,
 `password` VARCHAR (255) NOT NULL,
 `telefone` VARCHAR (13),
-`pais VARCHAR` (100) NOT NULL,
+`pais` VARCHAR (100) NOT NULL,
 `localidade` VARCHAR (100) NOT NULL,
 `enebled` BOOLEAN NOT NULL,
 `created_at` DATETIME NOT NULL,
@@ -97,5 +97,16 @@ REFERENCES tbl_prestadores(id),
 ADD CONSTRAINT fk_servico_prestacao_servico
 FOREIGN KEY (id_servico)
 REFERENCES tbl_servico(id)
+;
 
+DROP TABLE tbl_servicos;
 
+CREATE TABLE tbl_servicos (
+`id` INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT UNIQUE,
+`nome` VARCHAR(50) NOT NULL,
+`descricao` VARCHAR(255),
+`categoria` VARCHAR(20) NOT NULL,
+`enabled_at` BOOLEAN NOT NULL,
+`created_at` DATETIME NOT NULL,
+`updated_at` DATETIME NOT NULL
+);
