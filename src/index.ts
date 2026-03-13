@@ -1,7 +1,8 @@
 import express, { type Request, type Response } from "express";
-import { adicionarServico, apagarServico, listarServicos, obterServico } from "./servico.js";
+import { adicionarServico, apagarServico,  listarServicos, obterServico } from "./servico.js";
 import { apagarPrestadorDeServico, calcularOrcamento, criarPrestadorDeServico, editarPrestadorDeServico, selecionarPrestador, selecionarServico } from "./orcamento.js";
-import { createUser, getUserById, getUsers } from "./users.js";
+import { createUser, getUserById, getUsers, } from "./users.js";
+import { createServicos, getServicosById, getServicos } from "./servico.js";
 import { stat } from "node:fs";
 const app = express();
 app.use(express.json());
@@ -120,20 +121,20 @@ app.get("/get-user-id", async (req: Request, res: Response) => {
     if (id) {
         const getUserByIdResponse = await getUserById(id as string);
 
-if (!getUserByIdResponse) {
-    res.status(404).json({
-        status: "error",
-        message: "Utilizador nao encontrado",
-        data: null
-    })
-}
+        if (!getUserByIdResponse) {
+            res.status(404).json({
+                status: "error",
+                message: "Utilizador nao encontrado",
+                data: null
+            })
+        }
 
 
-res.status(200).json({
-    status: "success",
-    message: " Utilizador encontrado com sucesso!",
-    data: getUserByIdResponse
-})
+        res.status(200).json({
+            status: "success",
+            message: " Utilizador encontrado com sucesso!",
+            data: getUserByIdResponse
+        })
 
         res.json(getUserByIdResponse);
     } else {
@@ -147,48 +148,136 @@ res.status(200).json({
 
 
 // Rota para inserir um novo utilizador na base de dados
-app.get("/create-user", async (req: Request, res: Response) => {
+//rota para criar utilizador
+app.post("/create-user", async (req: Request, res: Response) => {
 
-    const {
-        id,
-        nome,
-        numero_identidade,
-        data_nascimento,
-        email,
-        password,
-        telefone,
-        pais,
-        localidade
-    } = req.query;
+    const user = req.body;
 
-    if (id && nome && email && password) {
-
-        const createUserResponse = await createUser(
-            id as string,
-            nome as string,
-            numero_identidade as string,
-            data_nascimento as string,
-            email as string,
-            password as string,
-            telefone as string,
-            pais as string,
-            localidade as string
-        );
-
-        res.json(createUserResponse);
-
-    } else {
-
-        res.json({
-            mensagem: "Dados do utilizador são obrigatórios."
+    if (!user) {
+        return res.status(400).json({
+            status: "error",
+            mensagem: "Campos obrigatórios em falta",
+            data: null
         });
-
     }
 
+
+    console.log("Dados recebidos:", user);
+
+    const insertUserResponse = await createUser(
+        user.id,
+        user.nome,
+        user.numero_identidade,
+        user.data_nascimento,
+        user.email,
+        user.password, user.telefone,
+        user.pais,
+        user.localidade, user.enebled,
+        user.created_at,
+        user.updated_at);
+
+    res.json(insertUserResponse);
 });
 
 
+/*
 
+//Rota para criar um novo serviço na base de dados
+app.post("/create-servico", async (req: Request, res: Response) => {
+
+    const servico = req.body;
+
+    if (!servico) {
+        return res.status(400).json({
+            status: "error",
+            mensagem: "Campos obrigatórios em falta",
+            data: null
+        });
+    }
+
+    console.log("Dados recebidos:", servico);
+
+    const insertServicoResponse = await createServicos(
+        servico.id,
+        servico.nome,
+        servico.descricao,
+        servico.categoria,
+        servico.enabled
+    );
+
+    res.json(insertServicoResponse);
+});
+
+*/
+
+
+// Listar todos os serviços
+app.get("/get-servicos", async (req: Request, res: Response) => {
+    const servicos = await getServicos();
+    res.json({
+        status: "success",
+        message: "Serviços encontrados com sucesso!",
+        data: servicos
+    });
+});
+
+// Buscar serviço por ID
+app.get("/get-servico-id", async (req: Request, res: Response) => {
+    const { id } = req.query;
+
+    if (!id) {
+        return res.status(400).json({
+            status: "error",
+            message: "ID do serviço é obrigatório",
+            data: null
+        });
+    }
+
+    const servico = await getServicosById(id as string);
+
+    if (!servico) {
+        return res.status(404).json({
+            status: "error",
+            message: "Serviço não encontrado",
+            data: null
+        });
+    }
+
+    res.json({
+        status: "success",
+        message: "Serviço encontrado com sucesso!",
+        data: servico
+    });
+});
+
+// Criar um novo serviço
+app.post("/create-servico", async (req: Request, res: Response) => {
+    const servico = req.body;
+
+    if (!servico || !servico.id || !servico.nome || !servico.descricao || !servico.categoria) {
+        return res.status(400).json({
+            status: "error",
+            message: "Campos obrigatórios em falta",
+            data: null
+        });
+    }
+
+    console.log("Dados recebidos:", servico);
+
+    const createServicoResponse = await createServicos(
+        servico.id,
+        servico.nome,
+        servico.descricao,
+        servico.categoria,
+        servico.enabled
+    );
+
+    res.json({
+        status: "success",
+        message: "Serviço criado com sucesso!",
+        data: createServicoResponse
+    });
+});
 
 
 

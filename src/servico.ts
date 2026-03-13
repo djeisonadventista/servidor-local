@@ -1,4 +1,5 @@
-import { type ResponseType, type ServicoType,  } from "./utils/types.js";
+import db from "./lib/db.js";
+import { type ResponseType, type ServicoType, } from "./utils/types.js";
 export let catalogoServicos: ServicoType[] = []
 
 // adicionar um serviço novo
@@ -62,4 +63,55 @@ export function obterServico(nome: string): ServicoType | null {
         }
     }
     return null
+}
+
+
+
+export async function getServicos() {
+    const [rows] = await db.execute("SELECT * FROM tbl_servicos");
+    return rows;
+}
+
+export async function getServicosById(id: string) {
+    const [rows] = await db.execute(
+        "SELECT * FROM tbl_servicos WHERE id = ?",
+        [id]
+    );
+
+    if (Array.isArray(rows) && rows.length === 0) return null;
+
+    return Array.isArray(rows) ? rows[0] : null;
+}
+export async function createServicos(
+    id: string,
+    nome: string,
+    descricao: string,
+    categoria: string,
+    enabled: boolean
+) {
+    try {
+
+        const [rows] = await db.execute(
+            `INSERT INTO tbl_servicos
+            (id, nome, descricao, categoria, enabled, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [
+                id,
+                nome,
+                descricao,
+                categoria,
+                enabled,
+                new Date(),
+                new Date()
+            ]
+        );
+
+        console.log({ rows });
+
+        return rows;
+
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
 }

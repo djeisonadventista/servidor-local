@@ -21,13 +21,17 @@ export async function createUser(
     password: string,
     telefone: string,
     pais: string,
-    localidade: string
+    localidade: string,
+    enebled: boolean,
+    created_at: string,
+    update_at: string
 ) {
+try {
 
-    const [result] = await db.execute(
+    const [rows] = await db.execute(
         `INSERT INTO tbl_utilizadores
-        (id, nome, numero_identidade, data_nascimento, email, password, telefone, pais, localidade, enabled, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+        (id, nome, numero_identidade, data_nascimento, email, password, telefone, pais, localidade, enebled, created_at, update_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
             id,
             nome,
@@ -38,9 +42,16 @@ export async function createUser(
             telefone,
             pais,
             localidade,
-            true
+            enebled,
+            new Date(),
+            new Date()
         ]
     );
 
-    return result;
+    console.log({rows})
+    return rows
+} catch (error) {
+    console.log(error);
+    return null;
+}
 }
