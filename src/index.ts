@@ -2,7 +2,8 @@ import express, { type Request, type Response } from "express";
 import { adicionarServico, apagarServico,  listarServicos, obterServico } from "./servico.js";
 import { apagarPrestadorDeServico, calcularOrcamento, criarPrestadorDeServico, editarPrestadorDeServico, selecionarPrestador, selecionarServico } from "./orcamento.js";
 import { createUser, getUserById, getUsers, } from "./users.js";
-import { createServicos, getServicosById, getServicos } from "./servico.js";
+import { createServicos, getServicosById, getServicos,listaServicos } from "./servico.js";
+import { createPropostas, getPropostasById, getPropostas } from "./proposta.js";
 import { stat } from "node:fs";
 const app = express();
 app.use(express.json());
@@ -145,9 +146,6 @@ app.get("/get-user-id", async (req: Request, res: Response) => {
 });
 
 
-
-
-// Rota para inserir um novo utilizador na base de dados
 //rota para criar utilizador
 app.post("/create-user", async (req: Request, res: Response) => {
 
@@ -180,7 +178,7 @@ app.post("/create-user", async (req: Request, res: Response) => {
 });
 
 
-/*
+
 
 //Rota para criar um novo serviço na base de dados
 app.post("/create-servico", async (req: Request, res: Response) => {
@@ -208,7 +206,7 @@ app.post("/create-servico", async (req: Request, res: Response) => {
     res.json(insertServicoResponse);
 });
 
-*/
+
 
 
 // Listar todos os serviços
@@ -250,6 +248,104 @@ app.get("/get-servico-id", async (req: Request, res: Response) => {
     });
 });
 
+
+// Rota para listar servicos
+app.get("/lista-servicos", async (req: Request, res: Response) => {
+
+    const servicos = await listaServicos();
+
+    res.json({
+        status: "success",
+        message: "Serviços encontrados com sucesso!",
+        data: servicos
+    });
+
+});
+
+
+
+
+//Rota para criar uma nova proposta na base de dados
+app.post("/create-proposta", async (req: Request, res: Response) => {
+
+const proposta = req.body;
+
+if (!proposta) {
+return res.status(400).json({
+status: "error",
+mensagem: "Campos obrigatórios em falta",
+data: null
+});
+}
+
+console.log("Dados recebidos:", proposta);
+
+const insertPropostaResponse = await createPropostas(
+proposta.id,
+proposta.id_prestacao_servico,
+proposta.preco_hora,
+proposta.horas_estimadas,
+proposta.estado,
+proposta.enabled
+);
+
+res.json(insertPropostaResponse);
+
+});
+
+
+// Listar todos as propostas
+app.get("/get-propostas", async (req: Request, res: Response) => {
+
+const propostas = await getPropostas();
+
+res.json({
+status: "success",
+message: "propostas encontrados com sucesso!",
+data: propostas
+});
+
+});
+
+
+// Buscar proposta por ID
+app.get("/get-proposta-id", async (req: Request, res: Response) => {
+
+const { id } = req.query;
+
+if (!id) {
+return res.status(400).json({
+status: "error",
+message: "ID da proposta é obrigatório",
+data: null
+});
+}
+
+const proposta = await getPropostasById(id as string);
+
+if (!proposta) {
+return res.status(404).json({
+status: "error",
+message: "proposta não encontrado",
+data: null
+});
+}
+
+res.json({
+status: "success",
+message: "proposta encontrado com sucesso!",
+data: proposta
+});
+
+});
+
+
+
+
+
+
+/*
+
 // Criar um novo serviço
 app.post("/create-servico", async (req: Request, res: Response) => {
     const servico = req.body;
@@ -279,7 +375,7 @@ app.post("/create-servico", async (req: Request, res: Response) => {
     });
 });
 
-
+*/
 
 app.listen(8080, () => {
     console.log("Servidor rodando na porta 8080");

@@ -78,7 +78,7 @@ export async function getServicosById(id: string) {
         [id]
     );
 
-    if (Array.isArray(rows) && rows.length === 0) return null;
+    if (Array.isArray(rows) && rows.length === 0) return null
 
     return Array.isArray(rows) ? rows[0] : null;
 }
@@ -93,10 +93,10 @@ export async function createServicos(
 
         const [rows] = await db.execute(
             `INSERT INTO tbl_servicos
-            (id, nome, descricao, categoria, enabled, created_at, updated_at)
+            (id, nome, descricao, categoria, enabled_at, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, ?, ?)`,
             [
-                id,
+                null,
                 nome,
                 descricao,
                 categoria,
@@ -107,6 +107,23 @@ export async function createServicos(
         );
 
         console.log({ rows });
+
+        return rows;
+
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+// Funcao para listar servico
+
+export async function listaServicos() {
+    try {
+
+        const [rows] = await db.execute(
+            "SELECT * FROM tbl_servicos"
+        );
 
         return rows;
 

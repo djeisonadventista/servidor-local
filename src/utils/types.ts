@@ -21,12 +21,12 @@ export interface ResponseType {
 }
 
 export interface PrestadorType {
-  nome: string;
-  precoHora: number;
-  profissao: string;
-  minimoParaDesconto: number;
-  percentagemDesconto: number;
-  taxaUrgencia: number;
+    nome: string;
+    precoHora: number;
+    profissao: string;
+    minimoParaDesconto: number;
+    percentagemDesconto: number;
+    taxaUrgencia: number;
 }
 
 export interface userType {
@@ -51,5 +51,16 @@ export interface ServicosType {
     categoria: string;
     enabled: boolean;
     created_at: Date;
+    updated_at: Date;
+}
+
+export interface PropostasType {
+    id: string;
+    id_prestacao_servico: string;
+    preco_hora: string;
+    horas_estimadas: string;
+    estado: string;
+    enabled: boolean;
+    created_at: Date; 
     updated_at: Date;
 }

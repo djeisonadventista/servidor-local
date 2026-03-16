@@ -25,6 +25,21 @@ alterarNome(novoNome: string) {
 const prestador1 = new Prestador("Djeison", 50, "Programador", 100, 0.1, 1.3);
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 nome: Djeison
 precoHora: 50

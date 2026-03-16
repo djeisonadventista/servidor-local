@@ -12,7 +12,7 @@ VALUES (
 true,
 NOW(),
 NOW()
-);
+);   
 
 INSERT INTO tbl_orcamento
 VALUES (
@@ -60,6 +60,18 @@ NULL,
 20,
 "pendente",
 1,
+true,
+NOW(),
+NOW()
+);
+
+INSERT INTO tbl_proposta
+VALUES (
+NULL,
+"f9dad001-a0da-4081-ac59-e82886b290a1",
+200,
+8,
+"finalizado",
 true,
 NOW(),
 NOW()
