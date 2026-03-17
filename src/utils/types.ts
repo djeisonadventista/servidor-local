@@ -64,3 +64,13 @@ export interface PropostasType {
     created_at: Date; 
     updated_at: Date;
 }
+
+ export interface ServiceDBType{
+    id: string;
+    nome: string;
+    descricao: string;
+    categoria: string;
+    enabled: boolean;
+    created_at: string;
+    updated_at: string;
+}
