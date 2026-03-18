@@ -70,7 +70,7 @@ export interface PropostasType {
     nome: string;
     descricao: string;
     categoria: string;
-    enabled: boolean;
+    enabled_at: boolean;
     created_at: string;
     updated_at: string;
 }

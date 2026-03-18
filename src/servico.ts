@@ -145,7 +145,7 @@ export async function addServiceToDB(newService: ServiceDBType) {
             newService.nome,
             newService.descricao,
             newService.categoria,
-            newService.enabled,
+            newService.enabled_at,
             new Date(),
             new Date()
         ]
@@ -196,20 +196,20 @@ export async function updateService(id: string, updatedService: ServiceDBType) {
     try {
         const query = `UPDATE tbl_servicos
         SET
-        nome=?
-        descricao=?
-        categoria=?
-        enabled=?
+        nome=?,
+        descricao=?,
+        categoria=?,
+        enabled_at=?,
         updated_at=?
         WHERE
         id=?
-        ;`
+        `;
 
         const values = [
             updatedService.nome,
             updatedService.descricao,
             updatedService.categoria,
-            updatedService.enabled,
+            updatedService.enabled_at,
             new Date(),
             id
         ]
@@ -222,17 +222,17 @@ export async function updateService(id: string, updatedService: ServiceDBType) {
     }
 }
 
-export  async function deleteService(id: string) {
-     try {
+export async function deleteService(id: string) {
+    try {
 
         const query = `DELETE  FROM tbl_servicos WHERE id = ?`
 
         const value = [id]
 
-        const rows = await db.execute(query, value)
+        const rows: any = await db.execute(query, value)
 
-        return rows
-        
+        return rows [0]?.affetedRows === 0 ? null : rows
+
     } catch (error) {
         console.log(error);
         return null

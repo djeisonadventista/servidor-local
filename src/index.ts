@@ -29,6 +29,7 @@ import {
 import { createPropostas, getPropostasById, getPropostas } from "./proposta.js";
 import { stat } from "node:fs";
 import type { ServiceDBType } from "./utils/types.js";
+import { generateUUID } from "./utils/uuid.js";
 const app = express();
 app.use(express.json());
 
@@ -459,20 +460,10 @@ if (!id) {
 app.delete("/delete-service-by-id/:id", async (req: Request, res: Response) => {
     const { id } = req.params;
 
-const deletedService: ServiceDBType = req.body
-
 if (!id) {
         return res.status(400).json({
             status: "error",
             message: "ID  obrigatório",
-            data: null,
-        });
-    }
-
-if (!deletedService) {
-        return res.status(400).json({
-            status: "error",
-            message: "Dados de servico invalido",
             data: null,
         });
     }
