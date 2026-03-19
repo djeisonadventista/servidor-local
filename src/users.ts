@@ -1,4 +1,6 @@
 import db from "./lib/db.js";
+import { formatDateDDMMYYYY } from "./utils/data.js";
+import { hashPassword } from "./utils/password.js";
 import type { userType } from "./utils/types.js";
 import { generateUUID } from "./utils/uuid.js";
 
@@ -39,9 +41,9 @@ export async function createUser(
                 generateUUID(),
                 nome,
                 numero_identidade,
-                data_nascimento,
+                formatDateDDMMYYYY(data_nascimento),
                 email,
-                password,
+                await hashPassword (password),
                 telefone,
                 pais,
                 localidade,
