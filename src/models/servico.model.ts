@@ -98,7 +98,7 @@ try {
 
         const rows: any = await db.execute(query, value)
 
-        return rows [0]?.affetedRows === 0 ? null : rows
+        return rows [0]?.affectedRows === 0 ? null : rows
 
     } catch (error) {
         console.log(error);

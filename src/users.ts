@@ -113,7 +113,7 @@ export async function deleteUser(id: string) {
 
         const rows: any = await db.execute(query, values)
 
-        return rows[0]?.affetedRows === 0 ? null : rows
+        return rows[0]?.affectedRows === 0 ? null : rows
 
     } catch (error) {
         console.log(error);
