@@ -1,20 +1,19 @@
 import express, { type Request, type Response } from "express";
 import { router as serviceRouter } from "./routes/servico.route.js";
+import { router as usersRouter } from "./routes/users.route.js";
+import { router as orcamentoRouter } from "./routes/orcamento.route.js";
+import { router as propostaRouter } from "./routes/proposta.route.js";
+
 
 const app = express();
 app.use(express.json());
 
-app.use("/service", serviceRouter)
+app.use("/service", serviceRouter);
+app.use("/users", usersRouter)
+app.use("/orcamento", orcamentoRouter)
+app.use("/proposta", propostaRouter)
 
 
-/*
-import { UsersController } from "./controllers/users.controller.js";
-
-app.post("/users", UsersController.createUser);
-app.get("/users", UsersController.getAll);
-app.get("/users/:id", UsersController.get);
-
-*/
 
 
 

@@ -28,7 +28,7 @@ export const ServicoController = {
         }
 
 
-        res.status(200).json({
+       return res.status(200).json({
             status: "sucess",
             message: "servico criado com sucesso",
             data: createServiceResponse,
