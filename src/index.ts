@@ -3,6 +3,8 @@ import { router as serviceRouter } from "./routes/servico.route.js";
 import { router as usersRouter } from "./routes/users.route.js";
 import { router as orcamentoRouter } from "./routes/orcamento.route.js";
 import { router as propostaRouter } from "./routes/proposta.route.js";
+import { calcularTotalParcela } from "./views/parcela/tesla.js"
+
 
 
 const app = express();
@@ -13,7 +15,7 @@ app.use("/users", usersRouter)
 app.use("/orcamento", orcamentoRouter)
 app.use("/proposta", propostaRouter)
 
-
+app.use(teslaRouter);
 
 
 
@@ -29,3 +31,5 @@ app.get("/", (req: Request, res: Response) => {
 app.listen(8080, () => {
     console.log("Servidor rodando na porta 8080");
 });
+
+

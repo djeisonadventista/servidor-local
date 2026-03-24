@@ -1,12 +1,6 @@
 import type { Request, Response } from "express";
-import {
-    calcularOrcamento,
-    selecionarServico,
-    selecionarPrestador,
-    criarPrestadorDeServico,
-    editarPrestadorDeServico,
-    apagarPrestadorDeServico,
-} from "../orcamento.js";
+import type { OrcamentoDBType } from "../utils/types.js"
+import { OrcamentoModel } from "../models/orcamento.models.js"
 
 export const OrcamentoController = {
 
