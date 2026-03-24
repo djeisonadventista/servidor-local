@@ -1,16 +1,13 @@
-import { Router } from "express";
-import { PropostaController } from "../controllers/proposta.controller.js";
 
-const PropostaRoute = {
-    create: "/create",
-    getById: "/get-by-id/:id",
-    getAll: "/",
-};
+import { Router } from "express"
+import { PropostaController } from "../controllers/proposta.controller.js"
 
-const router = Router();
+const router = Router()
 
-router.get(PropostaRoute.getAll, PropostaController.getAll);
-router.get(PropostaRoute.getById, PropostaController.get);
-router.post(PropostaRoute.create, PropostaController.create);
+router.post("/", PropostaController.create)
+router.get("/", PropostaController.getAll)
+router.get("/:id", PropostaController.get)
+router.put("/:id", PropostaController.update)
+router.delete("/:id", PropostaController.delete)
 
-export { router };
+export { router }
