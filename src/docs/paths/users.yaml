@@ -1,0 +1,34 @@
+# paths/users.yaml
+
+paths:
+  /users:
+    get:
+      summary: Listar todos os utilizadores
+      description: Retorna uma Lista de Todos os utilizadores disponiveis
+      responses:
+        "200":
+          description: Lista de utilizadores
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/componentes/schemas/Users"
+
+        "404":
+          description: "Nenhum utilizador Encontrado"
+          content:
+            application/json:
+              schemas:
+                type: object
+                $ref: "#/componentes/schemas/ResponseError"
+    /service/create:
+      post:
+        summary: criar um novo utilizador
+        description: Criar um novo utilizador
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object

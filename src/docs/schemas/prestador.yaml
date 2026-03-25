@@ -1,0 +1,63 @@
+# schemas/prestador.yaml
+#id: string,
+#taxa_urgencia: number,
+#percentagem_desconto: number,
+#minimo_desconto: number,
+#nif: string,
+#profissao: string,
+#enable_at: boolean;
+#created_at: string;
+#updated_at: string;
+
+componentes:
+  schemas:
+    # schema principal de prestador
+    Servico:
+      type: object
+      properties:
+        id:
+          type: varchar
+          example: 1
+        taxa_urgencia:
+          type: string
+          example: "Gestor"
+        percentagem_desconto:
+          type: string
+          example: "0.2"
+        minimo_desconto:
+          type: string
+          example: "1000"
+        nif:
+          type: string
+          example: "0.1"
+        profissao:
+          type: string
+          example: "true"
+        enabled_at:
+          type: boolean
+          example: true
+        created_at:
+          type: string
+          example: "2026-12-10T00:00:00.000Z"
+        updated_at:
+          type: string
+          example: "2026-12-10T00:00:00.000Z"
+
+    # schemas generico de resposta de erro
+    ResponseError:
+      type: object
+      properties:
+        message:
+          type: string
+          exemple: "Erro ao buscar prestador"
+        Status:
+          type: boolean
+          example: false
+        data:
+          type: object
+          properties:
+            null
+
+
+
+

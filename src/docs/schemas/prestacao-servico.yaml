@@ -1,0 +1,74 @@
+# schemas/prestacao-servico.yaml
+#id: string;
+#designacao: string;
+#subtotal: number;
+#horas_estimadas: number;
+#id_prestador: string;
+#id_servico: string;
+#preco_hora: number;
+#estado: string;
+#id_orcamento: string;
+#enabled: boolean;
+#created_at: string;
+#updated_at: string;
+
+componentes:
+  schemas:
+    # schema principal de prestacao-servico
+    Prestacao-servico:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 3
+        designacao:
+          type: string
+          example: "Formacao Superior de Contabilidade"
+        subtotal:
+          type: string
+          example: "2000"
+        horas_estimadas:
+          type: string
+          example: "8"
+        id_prestador:
+          type: string
+          example: "4d7777fb-5db8-4654-a60a-ed0f2b576838"
+        id_servico:
+          type: string
+          example: "1"
+        preco_hora:
+          type: string
+          example: "20"
+        estado:
+          type: string
+          example: "Pendente"
+        id_orcamento:
+          type: string
+          example: "1"
+        enebled_at:
+          type: boolean
+          example: true
+        created_at:
+          type: string
+          example: "2020-09-12T00:00:00.000Z"
+        updated_at:
+          type: string
+          example: "2020-09-12T00:00:00.000Z"
+
+    # schemas generico de resposta de erro
+    ResponseError:
+      type: object
+      properties:
+        message:
+          type: string
+          exemple: "Erro ao buscar utilizadores"
+        Status:
+          type: boolean
+          example: false
+        data:
+          type: object
+          properties:
+            null
+
+
+

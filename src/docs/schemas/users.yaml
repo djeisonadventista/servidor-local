@@ -1,0 +1,74 @@
+# schemas/users.yaml
+#id: string;
+#nome: string;
+#numero_identidade: string;
+#data_nascimento: string;
+#email: string;
+#password: string;
+#telefone: string;
+#pais: string;
+#localidade: string;
+#enebled: boolean;
+#created_at: Date;
+#update_at: Date;
+
+componentes:
+  schemas:
+    # schema principal de uilizadores
+    Users:
+      type: object
+      properties:
+        id:
+          type: varchar
+          example: 2
+        nome:
+          type: string
+          example: "Djeison Santos"
+        numero_identidade:
+          type: string
+          example: "M001X"
+        data_nascimento:
+          type: string
+          example: "1996-02-18"
+        email:
+          type: string
+          example: "djeison.adventista@gmail.com"
+        password:
+          type: string
+          example: "$2a5125j.pn.Zt9gCshBcT8J.QIxO6N995ZnqG/PVD:PVGrkpKt5PB4HCOK"
+        telefone:
+          type: string
+          example: "9580703"
+        pais:
+          type: string
+          example: "Cabo Verde"
+        localidade:
+          type: string
+          example: "Monte Grande"
+        enebled_at:
+          type: boolean
+          example: true
+        created_at:
+          type: string
+          example: "2012-09-12T00:00:00.000Z"
+        updated_at:
+          type: string
+          example: "2012-09-12T00:00:00.000Z"
+
+    # schemas generico de resposta de erro
+    ResponseError:
+      type: object
+      properties:
+        message:
+          type: string
+          exemple: "Erro ao buscar utilizadores"
+        Status:
+          type: boolean
+          example: false
+        data:
+          type: object
+          properties:
+            null
+
+
+

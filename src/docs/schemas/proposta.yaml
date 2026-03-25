@@ -1,0 +1,55 @@
+# schemas/proposta.yaml
+#id: string,
+#id_prestacao_servico: string,
+#preco_hora: number,
+#horas_estimadas: number,
+#estado: string,
+#enabled: boolean,
+#created_at: string,
+#updated_at: string,
+
+componentes:
+  schemas:
+    # schema principal de proposta
+    Proposta:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        id_prestacao_servico:
+          type: string
+          example: "f9dad001-a0da-4081-ac59-e82886b290a1"
+        preco_hora:
+          type: string
+          example: "200"
+        horas_estimadas:
+          type: string
+          example: "8"
+          estado:
+          type: string
+          example: "Finalizado"
+        enabled_at:
+          type: boolean
+          example: true
+        created_at:
+          type: string
+          example: "2025-12-10T00:00:00.000Z"
+        updated_at:
+          type: string
+          example: "2025-12-10T00:00:00.000Z"
+
+    # schemas generico de resposta de erro
+    ResponseError:
+      type: object
+      properties:
+        message:
+          type: string
+          exemple: "Erro ao buscar servicos"
+        Status:
+          type: boolean
+          example: false
+        data:
+          type: object
+          properties:
+            null
