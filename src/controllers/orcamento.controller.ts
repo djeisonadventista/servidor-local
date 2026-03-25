@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import type { OrcamentoDBType } from "../utils/types.js"
-import { OrcamentoModel } from "../models/orcamento.models.js"
+import { OrcamentoModel } from "../models/orcamento.model.js"
 
 
 export const OrcamentoController = {

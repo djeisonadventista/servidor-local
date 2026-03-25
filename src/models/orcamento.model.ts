@@ -7,7 +7,7 @@ export const OrcamentoModel = {
     async create(orcamento: OrcamentoDBType) {
         try {
             const [rows] = await db.execute(
-                `INSERT INTO tbl_orcamentos 
+                `INSERT INTO tbl_orcamento
                 VALUES (?, ?, ?, ?, ?, ?)`,
 
                 [
@@ -28,7 +28,7 @@ export const OrcamentoModel = {
     },
 
     async getAll() {
-        const [rows] = await db.execute("SELECT * FROM tbl_orcamentos")
+        const [rows] = await db.execute("SELECT * FROM tbl_orcamento")
 
         return rows
     },
@@ -36,8 +36,8 @@ export const OrcamentoModel = {
     async get(id: string) {
         try {
             const [rows] = await db.execute(
-                `SELECT * FROM tbl_orcamentos 
-                WHERE tbl_orcamentos.id = ?`,
+                `SELECT * FROM tbl_orcamento 
+                WHERE tbl_orcamento.id = ?`,
 
                 [id]
             )
@@ -53,7 +53,7 @@ export const OrcamentoModel = {
     async update(id: string, orcamento: OrcamentoDBType) {
         try {
             const [rows] = await db.execute(
-                `UPDATE tbl_orcamentos 
+                `UPDATE tbl_orcamento 
                 SET total = ?, 
                 id_utilizadores = ?, 
                 enabled = ?, 
@@ -79,7 +79,7 @@ export const OrcamentoModel = {
     async delete(id: string) {
         try {
             const rows: any = await db.execute(
-                `DELETE FROM tbl_orcamentos 
+                `DELETE FROM tbl_orcamento
                 WHERE id = ?`,
 
                 [id]

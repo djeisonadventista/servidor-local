@@ -11,19 +11,11 @@ const UsersRoute = {
 
 const router = Router();
 
-// Buscar todos
+
 router.get(UsersRoute.getAll, UsersController.getAll);
-
-// Buscar por ID
 router.get(UsersRoute.getById, UsersController.getById);
-
-// Criar
 router.post(UsersRoute.create, UsersController.create);
-
-// Atualizar
 router.put(UsersRoute.update, UsersController.update);
-
-// Apagar
 router.delete(UsersRoute.delete, UsersController.delete);
 
 export { router };

@@ -1,6 +1,6 @@
 import type { Request, Response } from "express"
 import type { PrestacaoServicoDBType } from "../utils/types.js"
-import { PrestacaoServicoModel } from "../models/prestacao-servico..model.js"
+import { PrestacaoServicoModel } from "../models/prestacao-servico.model.js"
 
 export const PrestacaoServicoController = {
     async create(req: Request, res: Response) {
