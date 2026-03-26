@@ -21,7 +21,7 @@ componentes:
           example: "Servico de limpeza"
         descricao:
           type: string
-          example: " Servico de Limpeza Profissional para residentes"
+          example: " Servico de Limpeza Profissional para residentes e empresa"
         categoria:
           type: string
           example: "Limpeza"
@@ -35,13 +35,46 @@ componentes:
           type: string
           example: "2010-12-10T00:00:00.000Z"
 
+    # schemas para criar um novo servico
+    CreateService:
+      type: object
+      properties:
+        nome:
+          type: string
+          example: "Servico de Limpeza"
+        descricao:
+          type: string
+          example: "Servico de Limpeza Profissional para residentes e empresa"
+        categoria:
+          type: string
+          example: Limpeza
+        enabled_at:
+          type: boolean
+          example: 
+
+    # schemas generico para sucesso
+    ResponseSucess:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Servico criado com sucess"
+        status:
+          type: boolean
+          example: true
+        data:
+          type: object
+          $ref: "#/components/schemas/Servico"
+
+
+
     # schemas generico de resposta de erro
     ResponseError:
       type: object
       properties:
         message:
           type: string
-          exemple: "Erro ao buscar servicos"
+          example: "Erro ao buscar servicos"
         Status:
           type: boolean
           example: false

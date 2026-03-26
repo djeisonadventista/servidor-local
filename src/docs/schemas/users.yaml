@@ -1,3 +1,4 @@
+/*
 # schemas/users.yaml
 #id: string;
 #nome: string;
@@ -70,5 +71,5 @@ componentes:
           properties:
             null
 
-
+*/
 

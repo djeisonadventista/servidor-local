@@ -1,3 +1,4 @@
+/*
 # schemas/orcamento.yaml
 #id: string,
 #total: number,
@@ -45,3 +46,4 @@ componentes:
           type: object
           properties:
             null
+            */

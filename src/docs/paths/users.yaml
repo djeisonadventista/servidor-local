@@ -1,3 +1,4 @@
+/*
 # paths/users.yaml
 
 paths:
@@ -32,3 +33,4 @@ paths:
             application/json:
               schema:
                 type: object
+*/

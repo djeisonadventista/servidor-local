@@ -1,3 +1,4 @@
+/*
 # paths/prestacao-servico.yaml
 
 paths:
@@ -32,3 +33,4 @@ paths:
             application/json:
               schema:
                 type: object
+*/

@@ -15,13 +15,14 @@ const options: swaggerJsdoc.Options = {
                 url: `http://localhost:8080`,
                 description: `dev`,
             }
-        ],
+        ]
+ 
+    },
 
-        apis: [
+    apis: [
             path.join(process.cwd(), "./src/docs/schemas/*.yaml"),
             path.join(process.cwd(), "./src/docs/paths/*.yaml"),
         ]
-    }
 }
 
 export const swaggerSpec = swaggerJsdoc(options)
