@@ -1,0 +1,146 @@
+# paths/orcamento.yaml
+
+paths:
+  /orcamento:
+    get:
+      summary: Listar todos os orcamentos
+      tags:
+        - orcamento
+      description: Retorna uma lista de todos os orcamentos disponiveis
+      responses:
+        "200":
+          description: Lista de orcamento
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Orcamento"
+        "404":
+          description: Nenhum orcamento encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrcamentoResponseError"
+
+  /orcamento/create:
+    post:
+      summary: Criar um novo orcamento
+      tags:
+        - orcamento
+      description: Criar um novo orcamento
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOrcamento"
+      responses:
+        "200":
+          description: Orcamento criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrcamentoResponseSucess"
+        "400":
+          description: Dados invalidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrcamentoResponseError"
+
+  /orcamento/get-by-id/{id}:
+    get:
+      summary: Buscar um orcamento por ID
+      tags:
+        - orcamento
+      description: Retorna um orcamento especifico pelo ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do orcamento
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: Orcamento encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrcamentoResponseSucess"
+        "404":
+          description: Orcamento nao encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrcamentoResponseError"
+
+  /orcamento/update/{id}:
+    put:
+      summary: Atualizar um orcamento
+      tags:
+        - orcamento
+      description: Atualizar um orcamento especifico pelo ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do orcamento
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOrcamento"
+      responses:
+        "200":
+          description: Orcamento atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrcamentoResponseSucess"
+        "400":
+          description: Dados invalidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrcamentoResponseError"
+        "404":
+          description: Orcamento nao encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrcamentoResponseError"
+
+  /orcamento/delete/{id}:
+    delete:
+      summary: Apagar um orcamento
+      tags:
+        - orcamento
+      description: Apagar um orcamento especifico pelo ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do orcamento
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: Orcamento apagado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrcamentoResponseSucess"
+        "404":
+          description: Orcamento nao encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrcamentoResponseError"

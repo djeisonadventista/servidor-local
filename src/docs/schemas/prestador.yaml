@@ -1,0 +1,102 @@
+# schemas/prestador.yaml
+#id: string,
+#taxa_urgencia: number,
+#percentagem_desconto: number,
+#minimo_desconto: number,
+#nif: string,
+#profissao: string,
+#enable: boolean,
+#created_at: string,
+#updated_at: string
+
+components:
+  schemas:
+    # schema principal de prestador
+    Prestador:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        taxa_urgencia:
+          type: string
+          example: "0.2"
+        percentagem_desconto:
+          type: string
+          example: "0.1"
+        minimo_desconto:
+          type: string
+          example: "1000"
+        nif:
+          type: string
+          example: "34465132"
+        id_servico:
+          type: string
+          example: "4d7777fb-5db8-4654-a60a-ed0f2b576838"
+        profissao:
+          type: string
+          example: "Gestor"
+        enebled_at:
+          type: boolean
+          example: true
+        created_at:
+          type: string
+          example: "2020-09-12T00:00:00.000Z"
+        updated_at:
+          type: string
+          example: "2020-09-12T00:00:00.000Z"
+
+    # schemas para criar uma nova prestador
+    CreatePrestador:
+      type: object
+      properties:
+        taxa_urgencia:
+          type: string
+          example: "0.2"
+        percentagem_desconto:
+          type: string
+          example: "0.1"
+        minimo_desconto:
+          type: string
+          example: "1000"
+        nif:
+          type: string
+          example: "34465132"
+        id_servico:
+          type: string
+          example: "4d7777fb-5db8-4654-a60a-ed0f2b576838"
+        profissao:
+          type: string
+          example: "Gestor"
+        enebled_at:
+          type: boolean
+          example: true
+
+    # schemas generico para sucesso
+    PrestadorResponseSucess:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Prestador criado com sucess"
+        status:
+          type: boolean
+          example: true
+        data:
+          type: object
+          $ref: "#/components/schemas/Prestador"
+
+    # schemas generico de resposta de erro
+    PrestadorResponseError:
+      type: object
+      properties:
+        message:
+          type: string
+          exemple: "Erro ao buscar prestador"
+        status:
+          type: boolean
+          example: false
+        data:
+          type: object
+          properties:
+            null

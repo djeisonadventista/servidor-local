@@ -12,7 +12,7 @@
 #created_at: string;
 #updated_at: string;
 
-componentes:
+components:
   schemas:
     # schema principal de prestacao-servico
     Prestacao-servico:
@@ -55,14 +55,60 @@ componentes:
           type: string
           example: "2020-09-12T00:00:00.000Z"
 
-    # schemas generico de resposta de erro
-    ResponseError:
+    # schemas para criar uma nova prestacao-servico
+    CreatePrestacao-servico:
+      type: object
+      properties:
+        designacao:
+          type: string
+          example: "Formacao Superior de Contabilidade"
+        subtotal:
+          type: string
+          example: "2000"
+        horas_estimadas:
+          type: string
+          example: "8"
+        id_prestador:
+          type: string
+          example: "4d7777fb-5db8-4654-a60a-ed0f2b576838"
+        id_servico:
+          type: string
+          example: "1"
+        preco_hora:
+          type: string
+          example: "20"
+        estado:
+          type: string
+          example: "Pendente"
+        id_orcamento:
+          type: string
+          example: "1"
+        enebled_at:
+          type: boolean
+          example: true
+
+    # schemas generico para sucesso
+    Prestacao-servicoResponseSucess:
       type: object
       properties:
         message:
           type: string
-          exemple: "Erro ao buscar utilizadores"
-        Status:
+          example: "Prestacao-servico criado com sucess"
+        status:
+          type: boolean
+          example: true
+        data:
+          type: object
+          $ref: "#/components/schemas/Prestacao-servico"
+
+    # schemas generico de resposta de erro
+    Prestacao-servicoResponseError:
+      type: object
+      properties:
+        message:
+          type: string
+          exemple: "Erro ao buscar prestacao-servico"
+        status:
           type: boolean
           example: false
         data:

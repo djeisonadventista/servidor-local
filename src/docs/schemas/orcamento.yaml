@@ -1,0 +1,75 @@
+# schemas/orcamento.yaml
+#id: string,
+#total: number,
+#id_utilizadores: string,
+#enabled: boolean,
+#created_at: string,
+#updated_at: string
+
+components:
+  schemas:
+    # schema principal de orcamento
+    Orcamento:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        total:
+          type: string
+          example: " 500"
+        id_utilizadores:
+          type: string
+          example: " a2e25ed1-e1e7-45d6-92cb-d2d8fb342ec0"
+        enabled:
+          type: boolean
+          example: true
+        created_at:
+          type: string
+          example: "2000-12-10T00:00:00.000Z"
+        updated_at:
+          type: string
+          example: "2000-12-10T00:00:00.000Z"
+
+    # schemas para criar um novo orcamento
+    CreateOrcamento:
+      type: object
+      properties:
+        total:
+          type: string
+          example: " 500"
+        id_utilizadores:
+          type: string
+          example: " a2e25ed1-e1e7-45d6-92cb-d2d8fb342ec0"
+        enabled:
+          type: boolean
+          example: true
+
+    # schemas generico para sucesso
+    OrcamentoResponseSucess:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Orcamento criado com sucess"
+        status:
+          type: boolean
+          example: true
+        data:
+          type: object
+          $ref: "#/components/schemas/Orcamento"
+
+    # schemas generico de resposta de erro
+    OrcamentoResponseError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Erro ao buscar orcamento"
+        status:
+          type: boolean
+          example: false
+        data:
+          type: object
+          properties:
+            null
