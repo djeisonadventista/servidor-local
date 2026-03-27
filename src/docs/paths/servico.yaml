@@ -4,6 +4,8 @@ paths:
   /service:
     get:
       summary: Listar todos os servicos
+      tags:
+        - service
       description: Retorna uma lista de todos os servicos disponiveis
       responses:
         "200":
@@ -24,6 +26,8 @@ paths:
   /service/create:
     post:
       summary: Criar um novo servico
+      tags:
+        - service
       description: Criar um novo servico
       requestBody:
         required: true
@@ -48,6 +52,8 @@ paths:
   /service/get-by-id/{id}:
     get:
       summary: Buscar um servico por ID
+      tags:
+        - service
       description: Retorna um servico especifico pelo ID
       parameters:
         - name: id
@@ -74,6 +80,8 @@ paths:
   /service/update/{id}:
     put:
       summary: Atualizar um servico
+      tags:
+        - service
       description: Atualizar um servico especifico pelo ID
       parameters:
         - name: id
@@ -112,6 +120,8 @@ paths:
   /service/delete/{id}:
     delete:
       summary: Apagar um servico
+      tags:
+        - service
       description: Apagar um servico especifico pelo ID
       parameters:
         - name: id

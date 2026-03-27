@@ -1,0 +1,146 @@
+# paths/proposta.yaml
+
+paths:
+  /proposta:
+    get:
+      summary: Listar todos as propostas
+      tags:
+        - proposta
+      description: Retorna uma lista de todos as propostas disponiveis
+      responses:
+        "200":
+          description: Lista de proposta
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Proposta"
+        "404":
+          description: Nenhuma proposta encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PropostaResponseError"
+
+  /proposta/create:
+    post:
+      summary: Criar uma nova proposta
+      tags:
+        - proposta
+      description: Criar uma nova proposta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProposta"
+      responses:
+        "200":
+          description: proposta criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PropostaResponseSucess"
+        "400":
+          description: Dados invalidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PropostaResponseError"
+
+  /proposta/get-by-id/{id}:
+    get:
+      summary: Buscar uma proposta por ID
+      tags:
+        - proposta
+      description: Retorna uma proposta especifico pelo ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID da proposta
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: Proposta encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PropostaResponseSucess"
+        "404":
+          description: Proposta nao encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PropostaResponseError"
+
+  /proposta/update/{id}:
+    put:
+      summary: Atualizar uma proposta
+      tags:
+        - proposta
+      description: Atualizar uma proposta especifico pelo ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID da proposta
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProposta"
+      responses:
+        "200":
+          description: Proposta atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PropostaResponseSucess"
+        "400":
+          description: Dados invalidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PropostaResponseError"
+        "404":
+          description: Proposta nao encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PropostaResponseError"
+
+  /proposta/delete/{id}:
+    delete:
+      summary: Apagar uma proposta
+      tags:
+        - proposta
+      description: Apagar uma proposta especifico pelo ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID da proposta
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: Proposta apagado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PropostaResponseSucess"
+        "404":
+          description: Proposta nao encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PropostaResponseError"

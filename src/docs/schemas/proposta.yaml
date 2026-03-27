@@ -1,4 +1,4 @@
-/*
+
 # schemas/proposta.yaml
 #id: string,
 #id_prestacao_servico: string,
@@ -9,7 +9,7 @@
 #created_at: string,
 #updated_at: string,
 
-componentes:
+components:
   schemas:
     # schema principal de proposta
     Proposta:
@@ -27,7 +27,7 @@ componentes:
         horas_estimadas:
           type: string
           example: "8"
-          estado:
+        estado:
           type: string
           example: "Finalizado"
         enabled_at:
@@ -40,18 +40,54 @@ componentes:
           type: string
           example: "2025-12-10T00:00:00.000Z"
 
-    # schemas generico de resposta de erro
-    ResponseError:
+    # schema para criar uma nova proposta
+    CreateProposta:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        id_prestacao_servico:
+          type: string
+          example: "f9dad001-a0da-4081-ac59-e82886b290a1"
+        preco_hora:
+          type: string
+          example: "200"
+        horas_estimadas:
+          type: string
+          example: "8"
+        estado:
+          type: string
+          example: "Finalizado"
+        enabled_at:
+          type: boolean
+          example: true
+
+    # schemas generico para sucesso
+    PropostaResponseSucess:
       type: object
       properties:
         message:
           type: string
-          exemple: "Erro ao buscar servicos"
-        Status:
+          example: "Proposta criado com sucess"
+        status:
+          type: boolean
+          example: true
+        data:
+          type: object
+          $ref: "#/components/schemas/Proposta"
+
+    # schemas generico de resposta de erro
+    PropostaResponseError:
+      type: object
+      properties:
+        message:
+          type: string
+          exemple: "Erro ao buscar proposta"
+        status:
           type: boolean
           example: false
         data:
           type: object
           properties:
             null
-*/

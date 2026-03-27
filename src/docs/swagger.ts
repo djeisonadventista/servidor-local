@@ -16,7 +16,7 @@ const options: swaggerJsdoc.Options = {
                 description: `dev`,
             }
         ]
- 
+
     },
 
     apis: [

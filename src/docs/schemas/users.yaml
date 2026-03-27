@@ -1,5 +1,4 @@
-/*
-# schemas/users.yaml
+  # schemas/users.yaml
 #id: string;
 #nome: string;
 #numero_identidade: string;
@@ -13,15 +12,15 @@
 #created_at: Date;
 #update_at: Date;
 
-componentes:
+components:
   schemas:
-    # schema principal de uilizadores
+    # schema principal de uilizador
     Users:
       type: object
       properties:
         id:
-          type: varchar
-          example: 2
+          type: string
+          example: 1
         nome:
           type: string
           example: "Djeison Santos"
@@ -56,20 +55,63 @@ componentes:
           type: string
           example: "2012-09-12T00:00:00.000Z"
 
-    # schemas generico de resposta de erro
-    ResponseError:
+    # schemas para criar um novo utilizador
+    CreateUsers:
+      type: object
+      properties:
+        nome:
+          type: string
+          example: "Djeison Santos"
+        numero_identidade:
+          type: string
+          example: "M001X"
+        data_nascimento:
+          type: string
+          example: "1996-02-18"
+        email:
+          type: string
+          example: "djeison.adventista@gmail.com"
+        password:
+          type: string
+          example: "$2a5125j.pn.Zt9gCshBcT8J.QIxO6N995ZnqG/PVD:PVGrkpKt5PB4HCOK"
+        telefone:
+          type: string
+          example: "9580703"
+        pais:
+          type: string
+          example: "Cabo Verde"
+        localidade:
+          type: string
+          example: "Monte Grande"
+        enebled_at:
+          type: boolean
+          example: true
+
+    # schemas generico para sucesso
+    UsersResponseSucess:
       type: object
       properties:
         message:
           type: string
-          exemple: "Erro ao buscar utilizadores"
-        Status:
+          example: "Utilizadores criado com sucess"
+        status:
+          type: boolean
+          example: true
+        data:
+          tye: object
+          $pref: "#/components/schemas/Users"
+
+    # schemas generico de resposta de erro
+    UsersResponseError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Erro ao buscar Utilizadores"
+        status:
           type: boolean
           example: false
         data:
           type: object
           properties:
             null
-
-*/
-

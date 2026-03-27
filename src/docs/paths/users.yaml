@@ -1,10 +1,11 @@
-/*
 # paths/users.yaml
 
 paths:
   /users:
     get:
       summary: Listar todos os utilizadores
+      tags:
+        - users
       description: Retorna uma Lista de Todos os utilizadores disponiveis
       responses:
         "200":
@@ -22,15 +23,126 @@ paths:
             application/json:
               schemas:
                 type: object
-                $ref: "#/componentes/schemas/ResponseError"
-    /service/create:
-      post:
-        summary: criar um novo utilizador
-        description: Criar um novo utilizador
-        requestBody:
-          required: true
+                $ref: "#/componentes/schemas/UsersResponseError"
+                
+  /users/create:
+    post:
+      summary: criar um novo utilizador
+      tags:
+        - users
+      description: Criar um novo utilizador
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUsers"
+      responses:
+        "200":
+          description: utilizador criado com sucesso
           content:
             application/json:
               schema:
-                type: object
-*/
+                $ref: "#/components/schemas/UsersResponseSucess"
+        "400":
+          description: Dados invalidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersResponseError"
+
+  /users/get-by-id/{id}:
+    get:
+      summary: Buscar um utilizador por ID
+      tags:
+        - users
+      description: Retorna um utilizador especifico pelo ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do utilizador
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: utilizador encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersResponseSucess"
+        "404":
+          description: utilizador nao encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersResponseError"
+
+  /users/update/{id}:
+    put:
+      summary: Atualizar um utilizador
+      tags:
+        - users
+      description: Atualizar um utilizador especifico pelo ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do utilizador
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUsers"
+      responses:
+        "200":
+          description: utilizador atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersResponseSucess"
+        "400":
+          description: Dados invalidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersResponseError"
+        "404":
+          description: utilizador nao encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersResponseError"
+
+  /users/delete/{id}:
+    delete:
+      summary: Apagar um utilizador
+      tags:
+        - users
+      description: Apagar um utilizador especifico pelo ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do utilizador
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: utilizador apagado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersResponseSucess"
+        "404":
+          description: utilizador nao encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersResponseError"
