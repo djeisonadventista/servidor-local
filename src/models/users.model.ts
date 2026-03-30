@@ -2,7 +2,7 @@ import db from "../lib/db.js";
 import { formatDateDDMMYYYY } from "../utils/data.js";
 import { hashPassword } from "../utils/password.js";
 import { generateUUID } from "../utils/uuid.js";
-import type { userType } from "../utils/types.js";
+import type { UserDBType, userType } from "../utils/types.js";
 
 export const UsersModel = {
 
@@ -66,6 +66,19 @@ export const UsersModel = {
 
             return Array.isArray(rows) && rows.length > 0 ? rows[0] : null;
 
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+    },
+
+    async getByEmail(email: string) : Promise<UserDBType | null> {
+        try {
+            const [rows] = await db.execute
+            (`SELECT * FROM tbl_utilizadores 
+                WHERE email = ?`, [email]);
+            if (Array.isArray(rows) && rows.length === 0) return null;
+            return Array.isArray(rows) ? rows[0] as UserDBType : null;
         } catch (error) {
             console.log(error);
             return null;

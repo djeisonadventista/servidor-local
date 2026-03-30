@@ -24,17 +24,17 @@ paths:
                 type: object
                 $ref: "#/componentes/schemas/Prestacao-servicoResponseError"
 
-    /prestacao-servico/create:
-      post:
-        summary: criar um novo Prestacao-servico
-        tags:
+  /prestacao-servico/create:
+    post:
+      summary: criar um novo Prestacao-servico
+      tags:
         - prestacao-servico
-        description: Criar um novo Prestacao-servico
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
+      description: Criar um novo Prestacao-servico
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
               $ref: "#/components/schemas/CreatePrestacao-servico"
       responses:
         "200":

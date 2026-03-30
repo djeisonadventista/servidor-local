@@ -24,18 +24,18 @@ paths:
                 type: object
                 $ref: "#/componentes/schemas/PrestadorResponseError"
 
-    /prestador/create:
-      post:
-        summary: criar um novo Prestador
-        tags:
-        - prestador
-        description: Criar um novo Prestador
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-              $ref: "#/components/schemas/CreatePrestador"
+  /prestador/create:
+    post:
+      summary: criar um novo Prestador
+      tags:
+      - prestador
+      description: Criar um novo Prestador
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+            $ref: "#/components/schemas/CreatePrestador"
       responses:
         "200":
           description: Prestador criado com sucesso

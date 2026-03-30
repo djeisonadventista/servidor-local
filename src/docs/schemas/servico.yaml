@@ -53,7 +53,7 @@ components:
           example: true
 
     # schemas generico para sucesso
-    ResponseSucess:
+    ServiceResponseSucess:
       type: object
       properties:
         message:
@@ -67,7 +67,7 @@ components:
           $ref: "#/components/schemas/Servico"
 
     # schemas generico de resposta de erro
-    ResponseError:
+    ServiceResponseError:
       type: object
       properties:
         message:

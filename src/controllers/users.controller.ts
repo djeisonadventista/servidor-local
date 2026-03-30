@@ -2,6 +2,8 @@ import type { Request, Response } from "express";
 import { createUser, getUserById, getUsers } from "../users.js";
 import { UsersModel } from "../models/users.model.js";
 import type { userType } from "../utils/types.js";
+import { comparePassword } from "../utils/password.js";
+import jwt from "jsonwebtoken";
 
 
 export const UsersController = {
@@ -108,6 +110,47 @@ export const UsersController = {
         }
     },
 
+    async login(req: Request, res: Response) {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({
+                status: "error",
+                message: "Credenciais inválidas",
+                data: null,
+            });
+        }
+
+        const userData = await UsersModel.getByEmail(email as string);
+
+        if (!userData) {
+            return res.status(404).json({
+                status: "error",
+                message: "Nao existe nenhuma conta com esse email",
+                data: null,
+            });
+        }
+
+        const isPasswordValid = await comparePassword(password, userData.password);
+
+        if (!isPasswordValid) {
+            return res.status(401).json({
+                status: "error",
+                message: "Credenciais inválidas",
+                data: null,
+            });
+        }
+
+const payload = {
+            id: userData.id,
+            email: userData.email,
+            nome: userData.nome,
+        };
+
+        const token = jwt.sign(payload, process.env.JWT_SECRET_KEY as string, { expiresIn: "1h" });
+
+    },
+
     // Atualizar utilizador
     async update(req: Request, res: Response) {
         try {
@@ -193,3 +236,4 @@ export const UsersController = {
         }
     }
 };
+
