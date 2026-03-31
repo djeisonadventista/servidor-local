@@ -7,10 +7,12 @@ import { router as prestadorRouter } from "./routes/prestador.route.js";
 import { router as prestacaoServicoRouter } from "./routes/prestacao-servico.route.js";
 import { swaggerSpec} from "./docs/swagger.js"
 import swaggerUi from "swagger-ui-express"
-
+import dotenv from "dotenv";
 
 const app = express();
 app.use(express.json());
+
+dotenv.config();
 
 app.use("/service", serviceRouter)
 app.use("/users", usersRouter)

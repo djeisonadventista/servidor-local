@@ -87,6 +87,16 @@ components:
           type: boolean
           example: true
 
+    LoginUsers:
+      type: object
+      properties:
+        email:
+          type: string
+          example: "eu.strong@gmail.com"
+        password:
+          type: string
+          example: "rambo123"
+
     # schemas generico para sucesso
     UsersResponseSucess:
       type: object

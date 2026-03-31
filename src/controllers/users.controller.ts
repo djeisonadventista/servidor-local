@@ -31,7 +31,7 @@ export const UsersController = {
                 user.telefone,
                 user.pais,
                 user.localidade,
-                user.enabled, // corrigido
+                user.enabled,
                 user.created_at,
                 user.updated_at,
             );
@@ -147,10 +147,19 @@ const payload = {
             nome: userData.nome,
         };
 
-        const token = jwt.sign(payload, process.env.JWT_SECRET_KEY as string, { expiresIn: "1h" });
+        const token = jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: "1h" });
+
+return res.status(200).json({
+            status: "success",
+            message: "Login bem-sucedido",
+            data: { 
+                token,
+            user: payload,}
+        });
+
 
     },
-
+ 
     // Atualizar utilizador
     async update(req: Request, res: Response) {
         try {

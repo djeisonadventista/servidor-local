@@ -1,5 +1,6 @@
 import { UsersController } from "../controllers/users.controller.js";
 import { Router } from "express";
+import AuthMiddleware from "../security/auth.middleware.js";
 
 const UsersRoute = {
     create: "/create",
@@ -7,14 +8,15 @@ const UsersRoute = {
     getAll: "/",
     update: "/:id",
     delete: "/:id",
+    login: "/login",
 };
 
 const router = Router();
 
-
-router.get(UsersRoute.getAll, UsersController.getAll);
-router.get(UsersRoute.getById, UsersController.getById);
+router.post(UsersRoute.login, UsersController.login);
 router.post(UsersRoute.create, UsersController.create);
+router.get(UsersRoute.getAll, AuthMiddleware, UsersController.getAll);
+router.get(UsersRoute.getById, UsersController.getById);
 router.put(UsersRoute.update, UsersController.update);
 router.delete(UsersRoute.delete, UsersController.delete);
 
