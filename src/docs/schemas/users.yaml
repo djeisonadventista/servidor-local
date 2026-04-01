@@ -108,8 +108,8 @@ components:
           type: boolean
           example: true
         data:
-          tye: object
-          $pref: "#/components/schemas/Users"
+          type: object
+          $ref: "#/components/schemas/Users"
 
     # schemas generico de resposta de erro
     UsersResponseError:
