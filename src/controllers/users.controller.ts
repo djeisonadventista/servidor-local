@@ -73,7 +73,7 @@ export const UsersController = {
 
     // Buscar utilizador por ID
     async getById(req: Request, res: Response) {
-        
+
         try {
             const { id } = req.params;
 
@@ -141,108 +141,175 @@ export const UsersController = {
             });
         }
 
-const payload = {
+        const payload = {
             id: userData.id,
             email: userData.email,
             nome: userData.nome,
         };
-console.log("JWT_SECRET:", process.env.JWT_SECRET);
+        console.log("JWT_SECRET:", process.env.JWT_SECRET);
         const token = jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: "1h" });
 
-return res.status(200).json({
+        return res.status(200).json({
             status: "success",
             message: "Login bem-sucedido",
-            data: { 
+            data: {
                 token,
-            user: payload,}
+                user: payload,
+            }
         });
 
 
     },
- 
+
+
+
+/*
+   
+    import { UserService } from "../services/users.service";
+
+    const userService = new UserService();
+
+    export class UserController {
+
+        // 🔐 UPDATE PASSWORD
+        async updatePassword(req: Request, res: Response) {
+            try {
+                const userId = req.user.id; // vem do authGuard
+                const { oldPassword, newPassword } = req.body;
+
+                const result = await userService.updatePassword(
+                    userId,
+                    oldPassword,
+                    newPassword
+                );
+
+                return res.status(200).json({
+                    status: true,
+                    message: result.message
+                });
+
+            } catch (error: any) {
+                return res.status(400).json({
+                    status: false,
+                    message: error.message
+                });
+            }
+        },
+
+  // 🔄 RESET PASSWORD
+  async resetPassword(req: Request, res: Response) {
+    try {
+        const { email, newPassword } = req.body;
+
+        const result = await userService.resetPassword(email, newPassword);
+
+        return res.status(200).json({
+            status: true,
+            message: result.message
+        });
+
+    } catch (error: any) {
+        return res.status(400).json({
+            status: false,
+            message: error.message
+        });
+    }
+}
+}
+
+*/
+
+
+
+
+
+
+
+
+
     // Atualizar utilizador
     async update(req: Request, res: Response) {
-        try {
-            const { id } = req.params;
-            const updatedUser: userType = req.body;
+    try {
+        const { id } = req.params;
+        const updatedUser: userType = req.body;
 
-            if (!id) {
-                return res.status(400).json({
-                    status: "error",
-                    message: "ID é obrigatório",
-                    data: null,
-                });
-            }
-
-            if (!updatedUser) {
-                return res.status(400).json({
-                    status: "error",
-                    message: "Dados inválidos",
-                    data: null,
-                });
-            }
-
-            const updateUserResponse = await UsersModel.update(id as string, updatedUser);
-
-            if (!updateUserResponse) {
-                return res.status(400).json({
-                    status: "error",
-                    message: "Erro ao atualizar utilizador",
-                    data: null,
-                });
-            }
-
-            return res.status(200).json({
-                status: "success",
-                message: "Utilizador atualizado com sucesso",
-                data: updateUserResponse
-            });
-
-        } catch (error) {
-            return res.status(500).json({
+        if (!id) {
+            return res.status(400).json({
                 status: "error",
-                message: "Erro interno",
-                data: error,
+                message: "ID é obrigatório",
+                data: null,
             });
         }
-    },
+
+        if (!updatedUser) {
+            return res.status(400).json({
+                status: "error",
+                message: "Dados inválidos",
+                data: null,
+            });
+        }
+
+        const updateUserResponse = await UsersModel.update(id as string, updatedUser);
+
+        if (!updateUserResponse) {
+            return res.status(400).json({
+                status: "error",
+                message: "Erro ao atualizar utilizador",
+                data: null,
+            });
+        }
+
+        return res.status(200).json({
+            status: "success",
+            message: "Utilizador atualizado com sucesso",
+            data: updateUserResponse
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            status: "error",
+            message: "Erro interno",
+            data: error,
+        });
+    }
+},
 
     // Apagar utilizador
-    async delete(req: Request, res: Response) {
-        try {
-            const { id } = req.params;
+    async delete (req: Request, res: Response) {
+    try {
+        const { id } = req.params;
 
-            if (!id) {
-                return res.status(400).json({
-                    status: "error",
-                    message: "ID obrigatório",
-                    data: null,
-                });
-            }
-
-            const deleteUserResponse = await UsersModel.delete(id as string);
-
-            if (!deleteUserResponse) {
-                return res.status(400).json({
-                    status: "error",
-                    message: "Erro ao apagar utilizador",
-                    data: null,
-                });
-            }
-
-            return res.status(200).json({
-                status: "success",
-                message: "Utilizador apagado com sucesso",
-                data: deleteUserResponse
-            });
-
-        } catch (error) {
-            return res.status(500).json({
+        if (!id) {
+            return res.status(400).json({
                 status: "error",
-                message: "Erro interno",
-                data: error,
+                message: "ID obrigatório",
+                data: null,
             });
         }
+
+        const deleteUserResponse = await UsersModel.delete(id as string);
+
+        if (!deleteUserResponse) {
+            return res.status(400).json({
+                status: "error",
+                message: "Erro ao apagar utilizador",
+                data: null,
+            });
+        }
+
+        return res.status(200).json({
+            status: "success",
+            message: "Utilizador apagado com sucesso",
+            data: deleteUserResponse
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            status: "error",
+            message: "Erro interno",
+            data: error,
+        });
     }
+}
 };
 

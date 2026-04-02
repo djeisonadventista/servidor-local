@@ -77,6 +77,41 @@ paths:
               schema:
                 $ref: "#/components/schemas/OrcamentoResponseError"
 
+    /orcamento/{id}/calcular:
+      get:
+        summary: Calcular o total de um orcamento
+        tags:
+          - orcamento
+        description: Calcula o total de um orcamento especifico pelo ID
+        parameters:
+          - name: id
+            in: path
+            required: true
+            description: ID do orcamento
+            schema:
+              type: integer
+              example: 1
+        responses:
+          "200":
+            description: Total calculado com sucesso
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    total_calculado:
+                      type: string
+                      example: " 500"
+          "404":
+            description: Orcamento nao encontrado
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/OrcamentoResponseError"
+
+        /orcamento/{id}/calcular:
+
+
   /orcamento/update/{id}:
     put:
       summary: Atualizar um orcamento

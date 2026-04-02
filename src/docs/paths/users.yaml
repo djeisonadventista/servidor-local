@@ -178,3 +178,75 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UsersResponseError"
+
+  /users/update-password/{id}:
+    put:
+      summary: Atualizar a senha de um utilizador
+      tags:
+        - users
+      description: Atualizar a senha de um utilizador especifico pelo ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do utilizador
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePassword"
+      responses:
+        "200":
+          description: Senha atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersResponseSucess"
+        "400":
+          description: Dados invalidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersResponseError"
+        "404":
+          description: utilizador nao encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersResponseError"
+
+  /users/reset-password:
+    put:
+      summary: Resetar a senha de um utilizador
+      tags:
+        - users
+      description: Resetar a senha de um utilizador especifico pelo ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResetPasswordById"
+      responses:
+        "200":
+          description: Senha resetada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersResponseSucess"
+        "400":
+          description: Dados invalidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersResponseError"
+        "404":
+          description: utilizador nao encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersResponseError"

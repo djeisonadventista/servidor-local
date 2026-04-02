@@ -73,3 +73,20 @@ components:
           type: object
           properties:
             null
+
+    # schemas para calcular orcamento
+    CalcularOrcamentoResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: success
+          message:
+        type: string
+        example: "Orcamento calculado com sucesso"
+        data:
+          type: object
+          properties:
+            total:
+              type: string
+              example: " 500" 
