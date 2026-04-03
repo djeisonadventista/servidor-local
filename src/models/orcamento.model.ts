@@ -76,6 +76,74 @@ export const OrcamentoModel = {
         }
     },
 
+
+    // trabalho final..................................................
+    //(LÓGICA COMPLETA)
+
+    async calcularTotal(idOrcamento: string) {
+        try {
+
+            // 1. buscar prestacao_servico
+            const [prestacoes]: any = await db.execute(
+                `SELECT * FROM tbl_prestacao_servico WHERE id_orcamento = ?`,
+                [idOrcamento]
+            );
+
+            if (!prestacoes || prestacoes.length === 0) return null;
+
+            let totalFinal = 0;
+
+            for (const prestacao of prestacoes) {
+
+                // 2. buscar proposta aceite
+                const [propostas]: any = await db.execute(
+                    `SELECT * FROM tbl_proposta 
+                 WHERE id_prestacao_servico = ? AND estado = 'Aceite'`,
+                    [prestacao.id]
+                );
+
+                if (!propostas || propostas.length === 0) continue;
+
+                const proposta = propostas[0];
+
+                let total = proposta.preco_hora * proposta.horas_estimadas;
+
+                // 3. buscar prestador
+                const [prestadorRows]: any = await db.execute(
+                    `SELECT * FROM tbl_prestador WHERE id = ?`,
+                    [proposta.id_prestador]
+                );
+
+                const prestador = prestadorRows[0];
+
+                // urgencia
+                if (prestador.taxa_urgencia) {
+                    total = total * 1.2;
+                }
+
+                // desconto
+                if (prestador.minimoDesconto <= total) {
+                    total = total - (total * prestador.percentagemDesconto / 100);
+                }
+
+                totalFinal += total;
+            }
+
+            // 4. atualizar orcamento
+            await db.execute(
+                `UPDATE tbl_orcamento SET total = ? WHERE id = ?`,
+                [totalFinal, idOrcamento]
+            );
+
+            return totalFinal;
+
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+    },
+
+
     async delete(id: string) {
         try {
             const rows: any = await db.execute(

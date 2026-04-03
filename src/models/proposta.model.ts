@@ -83,6 +83,50 @@ export const PropostaModel = {
         }
     },
 
+    // trabalho final..................................................
+
+    async aceitarProposta(id: string) {
+    try {
+
+        // 1. marcar proposta como aceite
+        await db.execute(
+            `UPDATE tbl_proposta SET estado = 'Aceite' WHERE id = ?`,
+            [id]
+        );
+
+        // 2. buscar proposta
+        const [rows]: any = await db.execute(
+            `SELECT * FROM tbl_proposta WHERE id = ?`,
+            [id]
+        );
+
+        const proposta = rows[0];
+
+        // 3. atualizar prestacao_servico
+        await db.execute(
+            `UPDATE tbl_prestacao_servico 
+             SET estado = 'Aceite'
+             WHERE id = ?`,
+            [proposta.id_prestacao_servico]
+        );
+
+        // 4. rejeitar restantes propostas
+        await db.execute(
+            `UPDATE tbl_proposta 
+             SET estado = 'Rejeitada'
+             WHERE id_prestacao_servico = ? AND id != ?`,
+            [proposta.id_prestacao_servico, id]
+        );
+
+        return true;
+
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+},
+
+
     async delete(id: string) {
         try {
             const rows: any = await db.execute(

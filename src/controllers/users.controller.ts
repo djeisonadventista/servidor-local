@@ -161,6 +161,101 @@ export const UsersController = {
 
     },
 
+// UPDATE PASSWORD (seguro)
+    // trabalho final..................................................
+
+async updatePassword(req: Request, res: Response) {
+    try {
+        const { id } = req.params;
+        const { oldPassword, newPassword } = req.body;
+
+        if (!id || !oldPassword || !newPassword) {
+            return res.status(400).json({
+                status: "error",
+                message: "Dados obrigatórios em falta",
+                data: null
+            });
+        }
+
+        const user = await UsersModel.get(id);
+
+        if (!user) {
+            return res.status(404).json({
+                status: "error",
+                message: "Utilizador não encontrado",
+                data: null
+            });
+        }
+
+        const isValid = await comparePassword(oldPassword, user.password);
+
+        if (!isValid) {
+            return res.status(401).json({
+                status: "error",
+                message: "Password antiga inválida",
+                data: null
+            });
+        }
+
+        const updated = await UsersModel.updatePassword(id, newPassword);
+
+        return res.status(200).json({
+            status: "success",
+            message: "Password atualizada com sucesso",
+            data: updated
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            status: "error",
+            message: "Erro interno",
+            data: error
+        });
+    }
+}
+
+//RESET PASSWORD
+
+async resetPassword(req: Request, res: Response) {
+    try {
+        const { email, newPassword } = req.body;
+
+        if (!email || !newPassword) {
+            return res.status(400).json({
+                status: "error",
+                message: "Dados obrigatórios em falta",
+                data: null
+            });
+        }
+
+        const user = await UsersModel.getByEmail(email);
+
+        if (!user) {
+            return res.status(404).json({
+                status: "error",
+                message: "Utilizador não encontrado",
+                data: null
+            });
+        }
+
+        const updated = await UsersModel.updatePassword(user.id, newPassword);
+
+        return res.status(200).json({
+            status: "success",
+            message: "Password redefinida com sucesso",
+            data: updated
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            status: "error",
+            message: "Erro interno",
+            data: error
+        });
+    }
+}
+
+
 
 
 /*

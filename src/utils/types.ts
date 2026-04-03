@@ -147,3 +147,4 @@ export interface UserDBType {
     created_at: Date;
     update_at: Date;
 }
+

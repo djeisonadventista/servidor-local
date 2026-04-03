@@ -174,3 +174,20 @@ components:
           type: object
           properties:
             null
+
+    #trabalho final.................................................
+    UpdatePassword:
+      type: object
+      properties:
+        oldPassword:
+          type: string
+        newPassword:
+          type: string
+
+    ResetPassword:
+      type: object
+      properties:
+        email:
+          type: string
+        newPassword:
+          type: string

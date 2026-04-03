@@ -60,6 +60,47 @@ export const PropostaController = {
         }
     },
 
+    // trabalho final..................................................
+//ACEITAR PROPOSTA (CASCATA)
+
+async aceitar(req: Request, res: Response) {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({
+                status: "error",
+                message: "ID obrigatório",
+                data: null
+            });
+        }
+
+        const result = await PropostaModel.aceitarProposta(id);
+
+        if (!result) {
+            return res.status(400).json({
+                status: "error",
+                message: "Erro ao aceitar proposta",
+                data: null
+            });
+        }
+
+        return res.status(200).json({
+            status: "success",
+            message: "Proposta aceite com sucesso",
+            data: result
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            status: "error",
+            message: "Erro interno",
+            data: error
+        });
+    }
+},
+
+
     async delete(req: Request, res: Response) {
         const { id } = req.params
         try {

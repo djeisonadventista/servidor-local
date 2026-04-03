@@ -17,5 +17,7 @@ router.get(OrcamentoRoute.getById, OrcamentoController.get)
 router.put(OrcamentoRoute.update, OrcamentoController.update)
 router.delete(OrcamentoRoute.delete, OrcamentoController.delete)
 
+// trabalho final..................................................
+router.put("/:id/calcular", OrcamentoController.calcularTotal);
 export { router }
 

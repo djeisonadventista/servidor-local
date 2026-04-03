@@ -9,6 +9,11 @@ const UsersRoute = {
     update: "/:id",
     delete: "/:id",
     login: "/login",
+
+    // trabalho final..................................................
+    //(ADICIONAR)
+    updatePassword: "/update-password/:id",
+    resetPassword: "/reset-password",
 };
 
 const router = Router();
@@ -19,5 +24,9 @@ router.get(UsersRoute.getAll, AuthMiddleware, UsersController.getAll);
 router.get(UsersRoute.getById, UsersController.getById);
 router.put(UsersRoute.update, UsersController.update);
 router.delete(UsersRoute.delete, UsersController.delete);
+
+// trabalho final..................................................
+router.put(UsersRoute.updatePassword, AuthMiddleware, UsersController.updatePassword);
+router.put(UsersRoute.resetPassword, UsersController.resetPassword);
 
 export { router };
