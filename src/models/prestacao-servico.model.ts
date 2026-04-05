@@ -108,5 +108,21 @@ export const PrestacaoServicoModel = {
             console.log(err)
             return null
         }
+    },
+
+    // trabalho final..................................................
+    async getByIdOrcamento(id_orcamento: string) {
+        try {
+            const [rows] = await db.execute(
+                `SELECT * FROM tbl_prestacao_servico 
+            WHERE tbl_prestacao_servico.id_orcamento = ?`,
+                [id_orcamento]
+            )
+            if (Array.isArray(rows) && rows.length === 0) return null
+            return Array.isArray(rows) ? rows[0] : null
+        }
+        catch (error) {
+            console.log(error)
+            return null
+        }
     }
-}

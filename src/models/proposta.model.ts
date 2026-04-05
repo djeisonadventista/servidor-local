@@ -86,45 +86,45 @@ export const PropostaModel = {
     // trabalho final..................................................
 
     async aceitarProposta(id: string) {
-    try {
+        try {
 
-        // 1. marcar proposta como aceite
-        await db.execute(
-            `UPDATE tbl_proposta SET estado = 'Aceite' WHERE id = ?`,
-            [id]
-        );
+            // 1. marcar proposta como aceite
+            await db.execute(
+                `UPDATE tbl_proposta SET estado = 'Aceite' WHERE id = ?`,
+                [id]
+            );
 
-        // 2. buscar proposta
-        const [rows]: any = await db.execute(
-            `SELECT * FROM tbl_proposta WHERE id = ?`,
-            [id]
-        );
+            // 2. buscar proposta
+            const [rows]: any = await db.execute(
+                `SELECT * FROM tbl_proposta WHERE id = ?`,
+                [id]
+            );
 
-        const proposta = rows[0];
+            const proposta = rows[0];
 
-        // 3. atualizar prestacao_servico
-        await db.execute(
-            `UPDATE tbl_prestacao_servico 
+            // 3. atualizar prestacao_servico
+            await db.execute(
+                `UPDATE tbl_prestacao_servico 
              SET estado = 'Aceite'
              WHERE id = ?`,
-            [proposta.id_prestacao_servico]
-        );
+                [proposta.id_prestacao_servico]
+            );
 
-        // 4. rejeitar restantes propostas
-        await db.execute(
-            `UPDATE tbl_proposta 
+            // 4. rejeitar restantes propostas
+            await db.execute(
+                `UPDATE tbl_proposta 
              SET estado = 'Rejeitada'
              WHERE id_prestacao_servico = ? AND id != ?`,
-            [proposta.id_prestacao_servico, id]
-        );
+                [proposta.id_prestacao_servico, id]
+            );
 
-        return true;
+            return true;
 
-    } catch (error) {
-        console.log(error);
-        return null;
-    }
-},
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+    },
 
 
     async delete(id: string) {
@@ -141,5 +141,23 @@ export const PropostaModel = {
             console.log(err)
             return null
         }
+    },
+
+    // trabalho final..................................................
+
+    async getByPrestacaoServico(id_prestacao_servico: string) {
+        try {
+            const [rows] = await db.execute(
+                `SELECT * FROM tbl_proposta 
+                    WHERE tbl_proposta.id_prestacao_servico = ?`,
+                [id_prestacao_servico]
+            )
+            if (Array.isArray(rows) && rows.length === 0) return null
+            return Array.isArray(rows) ? rows[0] : null
+        } catch (err) {
+            console.log(err)
+            return null
+        }
     }
+
 }

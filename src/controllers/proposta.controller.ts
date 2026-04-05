@@ -61,44 +61,44 @@ export const PropostaController = {
     },
 
     // trabalho final..................................................
-//ACEITAR PROPOSTA (CASCATA)
+    //ACEITAR PROPOSTA (CASCATA)
 
-async aceitar(req: Request, res: Response) {
-    try {
-        const { id } = req.params;
+    async aceitar(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
 
-        if (!id) {
-            return res.status(400).json({
+            if (!id) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "ID obrigatório",
+                    data: null
+                });
+            }
+
+            const result = await PropostaModel.aceitarProposta(id);
+
+            if (!result) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "Erro ao aceitar proposta",
+                    data: null
+                });
+            }
+
+            return res.status(200).json({
+                status: "success",
+                message: "Proposta aceite com sucesso",
+                data: result
+            });
+
+        } catch (error) {
+            return res.status(500).json({
                 status: "error",
-                message: "ID obrigatório",
-                data: null
+                message: "Erro interno",
+                data: error
             });
         }
-
-        const result = await PropostaModel.aceitarProposta(id);
-
-        if (!result) {
-            return res.status(400).json({
-                status: "error",
-                message: "Erro ao aceitar proposta",
-                data: null
-            });
-        }
-
-        return res.status(200).json({
-            status: "success",
-            message: "Proposta aceite com sucesso",
-            data: result
-        });
-
-    } catch (error) {
-        return res.status(500).json({
-            status: "error",
-            message: "Erro interno",
-            data: error
-        });
-    }
-},
+    },
 
 
     async delete(req: Request, res: Response) {
@@ -113,7 +113,24 @@ async aceitar(req: Request, res: Response) {
             console.log(err)
             return res.status(500).json({ message: "Erro ao deletar proposta" })
         }
-    }
+    },
+
+    // trabalho final..................................................
+
+    async getByPrestacaoServico(req: Request, res: Response) {
+        const { id } = req.params
+        try {
+            const propostaResponse = await PropostaModel.get(id as string)
+
+            if (!propostaResponse) return res.status(400).json({ message: "Erro ao buscar proposta" })
+
+            return res.status(200).json({ message: "Proposta encontrada com sucesso", propostaResponse })
+        } catch (err) {
+            console.log(err)
+            return res.status(500).json({ message: "Erro ao buscar proposta" })
+        }
+    },
+
 }
 
 
