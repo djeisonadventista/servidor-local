@@ -120,7 +120,6 @@ export const OrcamentoController = {
     //CALCULAR ORÇAMENTO
     //(CRIAR / COMPLETAR)
 
-export const OrcamentoController = {
 
 async calcularTotal(req: Request, res: Response) {
     try {
@@ -134,7 +133,7 @@ async calcularTotal(req: Request, res: Response) {
             });
         }
 
-        const total = await OrcamentoModel.calcularTotal(id);
+        const total = await OrcamentoModel.calcularTotal(id as string);
 
         if (total === null) {
             return res.status(400).json({
@@ -157,13 +156,9 @@ async calcularTotal(req: Request, res: Response) {
             data: error
         });
     }
-}
-
 },
 
-    
-
-    async delete(req: Request, res: Response) {
+async delete(req: Request, res: Response) {
         const { id } = req.params
 
         if (!id) {
@@ -191,3 +186,7 @@ async calcularTotal(req: Request, res: Response) {
         })
     }
 }
+
+
+    
+    

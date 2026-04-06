@@ -1,6 +1,7 @@
 # schemas/proposta.yaml
 #id: string,
 #id_prestacao_servico: string,
+#id_prestador: string,
 #preco_hora: number,
 #horas_estimadas: number,
 #estado: string,
@@ -20,6 +21,9 @@ components:
         id_prestacao_servico:
           type: string
           example: "f9dad001-a0da-4081-ac59-e82886b290a1"
+        id_prestador:
+          type: integer
+          example: 1
         preco_hora:
           type: string
           example: "200"
@@ -61,6 +65,36 @@ components:
         enabled_at:
           type: boolean
           example: true
+
+    PropostaAceite:
+      type: object
+      description: Representa uma proposta que foi aceite
+      properties:
+        id:
+          type: integer
+          description: ID da proposta
+          example: 10
+        id_prestacao_servico:
+          type: integer
+          description: ID da prestação de serviço associada
+          example: 5
+        estado:
+          type: string
+          description: Estado atual da proposta
+          enum:
+            - Pendente
+            - Aceite
+            - Rejeitada
+          example: Aceite
+        data_aceite:
+          type: string
+          format: date-time
+          description: Data em que a proposta foi aceite
+          example: "2026-04-04T15:30:00Z"
+        mensagem:
+          type: string
+          description: Mensagem de confirmação
+          example: "Proposta aceite com sucesso"      
 
     # schemas generico para sucesso
     PropostaResponseSucess:

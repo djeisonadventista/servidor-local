@@ -1,14 +1,13 @@
 import type { Request, Response } from "express";
 import { createUser, getUserById, getUsers } from "../users.js";
 import { UsersModel } from "../models/users.model.js";
-import type { userType } from "../utils/types.js";
-import { comparePassword } from "../utils/password.js";
+import type { UserDBType, userType } from "../utils/types.js";
+import { comparePassword, hashPassword } from "../utils/password.js";
 import jwt from "jsonwebtoken";
-
 
 export const UsersController = {
 
-    // Criar utilizador
+    //  Criar utilizador
     async create(req: Request, res: Response) {
         try {
             const user = req.body;
@@ -21,13 +20,16 @@ export const UsersController = {
                 });
             }
 
+            //  hash da password
+            const hashedPassword = await hashPassword(user.password);
+
             const insertUserResponse = await createUser(
                 user.id,
                 user.nome,
                 user.numero_identidade,
                 user.data_nascimento,
                 user.email,
-                user.password,
+                hashedPassword,
                 user.telefone,
                 user.pais,
                 user.localidade,
@@ -43,15 +45,16 @@ export const UsersController = {
             });
 
         } catch (error) {
+            console.error(error);
             return res.status(500).json({
                 status: "error",
                 message: "Erro interno ao criar utilizador",
-                data: error,
+                data: null,
             });
         }
     },
 
-    // Buscar todos utilizadores
+    //  Buscar todos utilizadores
     async getAll(req: Request, res: Response) {
         try {
             const getUsersResponse = await getUsers();
@@ -63,17 +66,17 @@ export const UsersController = {
             });
 
         } catch (error) {
+            console.error(error);
             return res.status(500).json({
                 status: "error",
                 message: "Erro ao buscar utilizadores",
-                data: error,
+                data: null,
             });
         }
     },
 
-    // Buscar utilizador por ID
+    //  Buscar utilizador por ID
     async getById(req: Request, res: Response) {
-
         try {
             const { id } = req.params;
 
@@ -102,309 +105,278 @@ export const UsersController = {
             });
 
         } catch (error) {
+            console.error(error);
             return res.status(500).json({
                 status: "error",
                 message: "Erro interno",
-                data: error,
+                data: null,
             });
         }
     },
 
+    //  LOGIN
     async login(req: Request, res: Response) {
-        const { email, password } = req.body;
+        try {
+            const { email, password } = req.body;
 
-        if (!email || !password) {
-            return res.status(400).json({
-                status: "error",
-                message: "Credenciais inválidas",
-                data: null,
-            });
-        }
-
-        const userData = await UsersModel.getByEmail(email as string);
-
-        if (!userData) {
-            return res.status(404).json({
-                status: "error",
-                message: "Nao existe nenhuma conta com esse email",
-                data: null,
-            });
-        }
-
-        const isPasswordValid = await comparePassword(password, userData.password);
-
-        if (!isPasswordValid) {
-            return res.status(401).json({
-                status: "error",
-                message: "Credenciais inválidas",
-                data: null,
-            });
-        }
-
-        const payload = {
-            id: userData.id,
-            email: userData.email,
-            nome: userData.nome,
-        };
-        console.log("JWT_SECRET:", process.env.JWT_SECRET);
-        const token = jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: "1h" });
-
-        return res.status(200).json({
-            status: "success",
-            message: "Login bem-sucedido",
-            data: {
-                token,
-                user: payload,
+            if (!email || !password) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "Credenciais inválidas",
+                    data: null,
+                });
             }
-        });
 
+            const userData = await UsersModel.getByEmail(email);
 
+            if (!userData) {
+                return res.status(404).json({
+                    status: "error",
+                    message: "Não existe nenhuma conta com esse email",
+                    data: null,
+                });
+            }
+
+            const isPasswordValid = await comparePassword(password, userData.password);
+
+            if (!isPasswordValid) {
+                return res.status(401).json({
+                    status: "error",
+                    message: "Credenciais inválidas",
+                    data: null,
+                });
+            }
+
+            const payload = {
+                id: userData.id,
+                email: userData.email,
+                nome: userData.nome,
+            };
+
+            const token = jwt.sign(
+                payload,
+                process.env.JWT_SECRET as string,
+                { expiresIn: "1h" }
+            );
+
+            return res.status(200).json({
+                status: "success",
+                message: "Login bem-sucedido",
+                data: {
+                    token,
+                    user: payload,
+                }
+            });
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                status: "error",
+                message: "Erro interno no login",
+                data: null,
+            });
+        }
+    },
+ 
+    //  UPDATE PASSWORD (SEGURO - com authGuard)
+    async updatePassword(req: any, res: Response) {
+        try {
+            const userId = req.user.id; // vem do authGuard
+            const { oldPassword, newPassword } = req.body;
+
+            if (!oldPassword || !newPassword) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "Dados obrigatórios em falta",
+                    data: null
+                });
+            }
+
+            if (newPassword.length < 6) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "Password deve ter pelo menos 6 caracteres",
+                    data: null
+                });
+            }
+
+            const user:UserDBType | null = await UsersModel.get(userId);
+
+            if (!user) {
+                return res.status(404).json({
+                    status: "error",
+                    message: "Utilizador não encontrado",
+                    data: null
+                });
+            }
+
+            console.log("USER:", user);
+            const isValid = await comparePassword(oldPassword, user.password);
+
+            if (!isValid) {
+                return res.status(401).json({
+                    status: "error",
+                    message: "Password antiga inválida",
+                    data: null
+                });
+            }
+
+            const hashedPassword = await hashPassword(newPassword);
+
+            await UsersModel.updatePassword(userId, hashedPassword);
+
+            return res.status(200).json({
+                status: "success",
+                message: "Password atualizada com sucesso",
+                data: null
+            });
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                status: "error",
+                message: "Erro interno",
+                data: null
+            });
+        }
     },
 
-// UPDATE PASSWORD (seguro)
-    // trabalho final..................................................
+    //  RESET PASSWORD (VERSÃO SIMPLES)
+    async resetPassword(req: Request, res: Response) {
+        try {
+            const { email, newPassword } = req.body;
 
-async updatePassword(req: Request, res: Response) {
-    try {
-        const { id } = req.params;
-        const { oldPassword, newPassword } = req.body;
-
-        if (!id || !oldPassword || !newPassword) {
-            return res.status(400).json({
-                status: "error",
-                message: "Dados obrigatórios em falta",
-                data: null
-            });
-        }
-
-        const user = await UsersModel.get(id);
-
-        if (!user) {
-            return res.status(404).json({
-                status: "error",
-                message: "Utilizador não encontrado",
-                data: null
-            });
-        }
-
-        const isValid = await comparePassword(oldPassword, user.password);
-
-        if (!isValid) {
-            return res.status(401).json({
-                status: "error",
-                message: "Password antiga inválida",
-                data: null
-            });
-        }
-
-        const updated = await UsersModel.updatePassword(id, newPassword);
-
-        return res.status(200).json({
-            status: "success",
-            message: "Password atualizada com sucesso",
-            data: updated
-        });
-
-    } catch (error) {
-        return res.status(500).json({
-            status: "error",
-            message: "Erro interno",
-            data: error
-        });
-    }
-}
-
-//RESET PASSWORD
-
-async resetPassword(req: Request, res: Response) {
-    try {
-        const { email, newPassword } = req.body;
-
-        if (!email || !newPassword) {
-            return res.status(400).json({
-                status: "error",
-                message: "Dados obrigatórios em falta",
-                data: null
-            });
-        }
-
-        const user = await UsersModel.getByEmail(email);
-
-        if (!user) {
-            return res.status(404).json({
-                status: "error",
-                message: "Utilizador não encontrado",
-                data: null
-            });
-        }
-
-        const updated = await UsersModel.updatePassword(user.id, newPassword);
-
-        return res.status(200).json({
-            status: "success",
-            message: "Password redefinida com sucesso",
-            data: updated
-        });
-
-    } catch (error) {
-        return res.status(500).json({
-            status: "error",
-            message: "Erro interno",
-            data: error
-        });
-    }
-}
-
-
-
-
-/*
-   
-    import { UserService } from "../services/users.service";
-
-    const userService = new UserService();
-
-    export class UserController {
-
-        // 🔐 UPDATE PASSWORD
-        async updatePassword(req: Request, res: Response) {
-            try {
-                const userId = req.user.id; // vem do authGuard
-                const { oldPassword, newPassword } = req.body;
-
-                const result = await userService.updatePassword(
-                    userId,
-                    oldPassword,
-                    newPassword
-                );
-
-                return res.status(200).json({
-                    status: true,
-                    message: result.message
-                });
-
-            } catch (error: any) {
+            if (!email || !newPassword) {
                 return res.status(400).json({
-                    status: false,
-                    message: error.message
+                    status: "error",
+                    message: "Dados obrigatórios em falta",
+                    data: null
                 });
             }
-        },
 
-  // 🔄 RESET PASSWORD
-  async resetPassword(req: Request, res: Response) {
-    try {
-        const { email, newPassword } = req.body;
+            if (newPassword.length < 6) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "Password deve ter pelo menos 6 caracteres",
+                    data: null
+                });
+            }
 
-        const result = await userService.resetPassword(email, newPassword);
+            const user = await UsersModel.getByEmail(email);
 
-        return res.status(200).json({
-            status: true,
-            message: result.message
-        });
+            if (!user) {
+                return res.status(404).json({
+                    status: "error",
+                    message: "Utilizador não encontrado",
+                    data: null
+                });
+            }
 
-    } catch (error: any) {
-        return res.status(400).json({
-            status: false,
-            message: error.message
-        });
-    }
-}
-}
+            const hashedPassword = await hashPassword(newPassword);
 
-*/
+            await UsersModel.updatePassword(user.id, hashedPassword);
 
+            return res.status(200).json({
+                status: "success",
+                message: "Password redefinida com sucesso",
+                data: null
+            });
 
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                status: "error",
+                message: "Erro interno",
+                data: null
+            });
+        }
+    },
+    
 
-
-
-
-
-
-
-    // Atualizar utilizador
+    //  Atualizar utilizador
     async update(req: Request, res: Response) {
-    try {
-        const { id } = req.params;
-        const updatedUser: userType = req.body;
+        try {
+            const { id } = req.params;
+            const updatedUser: userType = req.body;
 
-        if (!id) {
-            return res.status(400).json({
+            if (!id) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "ID é obrigatório",
+                    data: null,
+                });
+            }
+
+            if (!updatedUser) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "Dados inválidos",
+                    data: null,
+                });
+            }
+
+            const updateUserResponse = await UsersModel.update(id as string, updatedUser);
+
+            if (!updateUserResponse) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "Erro ao atualizar utilizador",
+                    data: null,
+                });
+            }
+
+            return res.status(200).json({
+                status: "success",
+                message: "Utilizador atualizado com sucesso",
+                data: updateUserResponse
+            });
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
                 status: "error",
-                message: "ID é obrigatório",
+                message: "Erro interno",
                 data: null,
             });
         }
+    },
 
-        if (!updatedUser) {
-            return res.status(400).json({
+    // 🗑️ Apagar utilizador
+    async delete(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+
+            if (!id) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "ID obrigatório",
+                    data: null,
+                });
+            }
+
+            const deleteUserResponse = await UsersModel.delete(id as string);
+
+            if (!deleteUserResponse) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "Erro ao apagar utilizador",
+                    data: null,
+                });
+            }
+
+            return res.status(200).json({
+                status: "success",
+                message: "Utilizador apagado com sucesso",
+                data: deleteUserResponse
+            });
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
                 status: "error",
-                message: "Dados inválidos",
+                message: "Erro interno",
                 data: null,
             });
         }
-
-        const updateUserResponse = await UsersModel.update(id as string, updatedUser);
-
-        if (!updateUserResponse) {
-            return res.status(400).json({
-                status: "error",
-                message: "Erro ao atualizar utilizador",
-                data: null,
-            });
-        }
-
-        return res.status(200).json({
-            status: "success",
-            message: "Utilizador atualizado com sucesso",
-            data: updateUserResponse
-        });
-
-    } catch (error) {
-        return res.status(500).json({
-            status: "error",
-            message: "Erro interno",
-            data: error,
-        });
     }
-},
-
-    // Apagar utilizador
-    async delete (req: Request, res: Response) {
-    try {
-        const { id } = req.params;
-
-        if (!id) {
-            return res.status(400).json({
-                status: "error",
-                message: "ID obrigatório",
-                data: null,
-            });
-        }
-
-        const deleteUserResponse = await UsersModel.delete(id as string);
-
-        if (!deleteUserResponse) {
-            return res.status(400).json({
-                status: "error",
-                message: "Erro ao apagar utilizador",
-                data: null,
-            });
-        }
-
-        return res.status(200).json({
-            status: "success",
-            message: "Utilizador apagado com sucesso",
-            data: deleteUserResponse
-        });
-
-    } catch (error) {
-        return res.status(500).json({
-            status: "error",
-            message: "Erro interno",
-            data: error,
-        });
-    }
-}
 };
-

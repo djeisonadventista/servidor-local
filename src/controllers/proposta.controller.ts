@@ -61,7 +61,7 @@ export const PropostaController = {
     },
 
     // trabalho final..................................................
-    //ACEITAR PROPOSTA (CASCATA)
+    //ACEITAR PROPOSTA 
 
     async aceitar(req: Request, res: Response) {
         try {
@@ -75,7 +75,7 @@ export const PropostaController = {
                 });
             }
 
-            const result = await PropostaModel.aceitarProposta(id);
+            const result = await PropostaModel.aceitarProposta(id as string);
 
             if (!result) {
                 return res.status(400).json({

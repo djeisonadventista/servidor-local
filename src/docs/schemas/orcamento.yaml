@@ -11,16 +11,23 @@ components:
     # schema principal de orcamento
     Orcamento:
       type: object
+      required:
+        - id
+        - total
+        - id_utilizadores
+        - enabled
+        - created_at
+        - updated_at
       properties:
         id:
           type: integer
           example: 1
         total:
-          type: string
-          example: " 500"
+          type: number
+          example: 500
         id_utilizadores:
           type: string
-          example: " a2e25ed1-e1e7-45d6-92cb-d2d8fb342ec0"
+          example: "a2e25ed1-e1e7-45d6-92cb-d2d8fb342ec0"
         enabled:
           type: boolean
           example: true
@@ -34,17 +41,56 @@ components:
     # schemas para criar um novo orcamento
     CreateOrcamento:
       type: object
+      required:
+        - total
+        - id_utilizadores
       properties:
         total:
           type: string
-          example: " 500"
+          example: "500"
         id_utilizadores:
           type: string
-          example: " a2e25ed1-e1e7-45d6-92cb-d2d8fb342ec0"
+          example: "a2e25ed1-e1e7-45d6-92cb-d2d8fb342ec0"
         enabled:
           type: boolean
           example: true
 
+    CalcularOrcamentoResponse:
+      type: object
+      description: Resultado do cálculo do orcamento
+      required:
+        - id
+        - id_prestador
+        - taxa_urgencia
+        - subtotal
+        - total
+        - servicos
+      properties:
+        id:
+          type: integer
+          example: 1
+        id_prestador:
+          type: integer
+          example: 1
+        taxa_urgencia:
+          type: number
+          format: float
+          example: 10
+        subtotal:
+          type: number
+          format: float
+          example: 200
+        total:
+          type: number
+          format: float
+          example: 220
+        servicos:
+          type: array
+          description: Lista de serviços do orçamento com total individual
+          items:
+            $ref: '#/components/schemas/CalcularResponse'
+
+   
     # schemas generico para sucesso
     OrcamentoResponseSucess:
       type: object
@@ -74,19 +120,3 @@ components:
           properties:
             null
 
-    # schemas para calcular orcamento
-    CalcularOrcamentoResponse:
-      type: object
-      properties:
-        status:
-          type: boolean
-          example: success
-          message:
-        type: string
-        example: "Orcamento calculado com sucesso"
-        data:
-          type: object
-          properties:
-            total:
-              type: string
-              example: " 500" 

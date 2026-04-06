@@ -77,6 +77,60 @@ paths:
               schema:
                 $ref: "#/components/schemas/PropostaResponseError"
 
+  /propostas/{id}/aceitar:
+    put:
+      summary: Aceitar uma proposta
+      tags:
+        - proposta
+      description: |
+        Permite ao dono do orçamento aceitar uma proposta.
+        
+        Ao aceitar:
+        - A proposta fica com estado "Aceite"
+        - As restantes propostas do mesmo serviço ficam "Rejeitadas"
+        - A prestação de serviço associada é atualizada
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID da proposta a ser aceite
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: Proposta aceite com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Proposta aceite com sucesso
+        "400":
+          description: Erro ao aceitar proposta
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Proposta não encontrada
+        "401":
+          description: Não autorizado
+        "404":
+          description: Proposta não encontrada
+
   /proposta/update/{id}:
     put:
       summary: Atualizar uma proposta

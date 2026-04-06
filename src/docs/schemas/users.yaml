@@ -97,29 +97,6 @@ components:
           type: string
           example: "rambo123"    
 
-    updatePasswordUsers:
-      type: object
-      properties:
-        email:
-          type: string
-          example: "djeison.adventista@gmail.com"
-        oldPassword:
-          type: string
-          example: "senhaAntiga123"
-        newPassword:
-          type: string
-          example: "novaSenha123"
-
-    ResetPasswordById:
-      type: object
-      properties:
-        email:
-          type: string
-          example: "djeison.adventista@gmail.com"
-        newPassword:
-          type: string
-          example: "novaSenha123"
-          
     UpdatePassword:
       type: object
       required:
@@ -136,17 +113,20 @@ components:
     ResetPasswordById:
       type: object
       required:
-      - id
-      - newPassword
+        - id
+        - newPassword
       properties:
         id:
           type: string
           example: "1"
-    newPassword:
-      type: string
-      example: "novaSenha123"
+          description: "ID do usuário cuja senha será redefinida"
+        newPassword:
+          type: string
+          format: password
+          example: "novaSenha123"
+          description: "Nova senha do usuário"
 
-    # schemas generico para sucesso
+              # schemas generico para sucesso
     UsersResponseSucess:
       type: object
       properties:
@@ -174,20 +154,3 @@ components:
           type: object
           properties:
             null
-
-    #trabalho final.................................................
-    UpdatePassword:
-      type: object
-      properties:
-        oldPassword:
-          type: string
-        newPassword:
-          type: string
-
-    ResetPassword:
-      type: object
-      properties:
-        email:
-          type: string
-        newPassword:
-          type: string

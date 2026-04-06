@@ -181,18 +181,17 @@ paths:
 
   /users/update-password/{id}:
     put:
-      summary: Atualizar a senha de um utilizador
+      summary: Atualizar password
       tags:
         - users
-      description: Atualizar a senha de um utilizador especifico pelo ID
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
           required: true
-          description: ID do utilizador
           schema:
-            type: integer
-            example: 1
+            type: string
       requestBody:
         required: true
         content:
@@ -201,23 +200,13 @@ paths:
               $ref: "#/components/schemas/UpdatePassword"
       responses:
         "200":
-          description: Senha atualizada com sucesso
+          description: Password atualizada
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UsersResponseSucess"
+                $ref: "#/components/schemas/UsersResponseSuccess"
         "400":
-          description: Dados invalidos
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UsersResponseError"
-        "404":
-          description: utilizador nao encontrado
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UsersResponseError"
+          description: Dados inválidos
 
   /users/reset-password:
     put:
@@ -250,52 +239,3 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UsersResponseError"
-
-    #trabalho final.................................................
-  /users/update-password/{id}:
-    put:
-      summary: Atualizar password
-      tags:
-        - users
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdatePassword"
-      responses:
-        "200":
-          description: Password atualizada
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UsersResponseSuccess"
-        "400":
-          description: Dados inválidos      
-          
-  /users/reset-password:
-    put:
-      summary: Resetar password
-      tags:
-        - users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ResetPassword"
-      responses:
-        "200":
-          description: Password redefinida
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UsersResponseSuccess"                 

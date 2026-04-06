@@ -152,6 +152,31 @@ paths:
               schema:
                 $ref: "#/components/schemas/OrcamentoResponseError"
 
+  /orcamento/{id}/calcular:
+    put:
+      summary: Calcula o orçamento final
+      tags:
+        - orcamento
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Orçamento calculado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrcamentoResponseSucess'
+        '400':
+          description: ID do orçamento inválid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrcamentoResponseError'              
+
   /orcamento/delete/{id}:
     delete:
       summary: Apagar um orcamento
