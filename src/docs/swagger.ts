@@ -7,7 +7,7 @@ const options: swaggerJsdoc.Options = {
         openapi: `3.0.0`,
         info: {
             title: "API Servidor Local",
-            description: " Plataforma de Gestao de Preatadores e Servico",
+            description: " Plataforma de Gestao de Prestadores e Servicos",
             version: " 1.0.0",
         },
         servers: [

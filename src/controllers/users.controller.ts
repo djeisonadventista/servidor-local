@@ -341,7 +341,7 @@ export const UsersController = {
         }
     },
 
-    // 🗑️ Apagar utilizador
+    //  Apagar utilizador
     async delete(req: Request, res: Response) {
         try {
             const { id } = req.params;

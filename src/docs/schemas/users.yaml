@@ -140,6 +140,20 @@ components:
           type: object
           $ref: "#/components/schemas/Users"
 
+    UsersResponseSuccess:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: Password atualizada com sucesso
+        data:
+          type: object
+          nullable: true
+          example: null
+
     # schemas generico de resposta de erro
     UsersResponseError:
       type: object
