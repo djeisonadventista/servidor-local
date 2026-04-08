@@ -1,6 +1,9 @@
 import type { Request, Response } from "express";
-import type { OrcamentoDBType } from "../utils/types.js"
+import { EstadoProposta, type OrcamentoDBType, type PropostaDBType } from "../utils/types.js"
 import { OrcamentoModel } from "../models/orcamento.model.js"
+import { PropostaModel } from "../models/proposta.model.js";
+import { PrestacaoServicoModel } from "../models/prestacao-servico.model.js";
+import { PrestadorModel } from "../models/prestador.model.js";
 
 
 export const OrcamentoController = {
@@ -121,72 +124,131 @@ export const OrcamentoController = {
     //(CRIAR / COMPLETAR)
 
 
-async calcularTotal(req: Request, res: Response) {
-    try {
+    async calculateBudget(req: Request, res: Response) {
         const { id } = req.params;
 
-        if (!id) {
-            return res.status(400).json({
-                status: "error",
-                message: "ID obrigatório",
-                data: null
+        try {
+
+            if (!id) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "ID obrigatório",
+                    data: null
+                });
+            }
+
+            const prestacaoServico = await PrestacaoServicoModel.getByIdOrcamento(id as string);
+
+            if (!prestacaoServico) {
+                return res.status(404).json({
+                    status: "error",
+                    message: "Nenhuma prestação de serviço encontrada",
+                    data: null
+                });
+            }
+
+
+            //fetch all proposal
+            const proposals = await PropostaModel.getByPrestacaoServico(prestacaoServico.id);
+            if (!proposals) {
+                return res.status(404).json({
+                    status: "error",
+                    message: "Nenhuma proposta encontrada",
+                    data: null
+                });
+            }
+
+            //find accepted proposal
+            const acceptedProposal: PropostaDBType | undefined = proposals.find((proposal) => proposal.estado === EstadoProposta.ACEITE);
+
+            if (!acceptedProposal) {
+                return res.status(404).json({
+                    status: "error",
+                    message: "Nenhuma proposta aceita encontrada",
+                    data: null
+                });
+            }
+
+            const preco_hora = acceptedProposal.preco_hora;
+            const horas_estimadas = acceptedProposal.horas_estimadas;
+
+            //fetch prestador to get urgency tax minimum discount and discount percentage based on attrs in utilts/types.ts
+            const prestador = await PrestadorModel.get(acceptedProposal.idPrestador);
+            if (!prestador) {
+                return res.status(404).json({
+                    status: "error",
+                    message: "Prestador não encontrado",
+                    data: null
+                });
+            }
+
+            const precoHora = acceptedProposal.preco_hora;
+            const horasEstimadas = acceptedProposal.horas_estimadas;
+
+            const urgencyTax = prestador.taxaUrgencia;
+            const minumumDiscount = prestador.minimoParaDesconto;
+            const discountPercentage = prestador.percentagemDesconto;
+
+            // Calculate the budget based on utils/types.ts
+            let subtotal = precoHora * horasEstimadas;
+
+            //if minimum discount is great than discount percentage
+            if (subtotal > minumumDiscount) {
+                subtotal = subtotal * (1 - discountPercentage);
+            }
+
+            if (prestacaoServico.urgente) {
+                // adda urgency tax
+                subtotal = subtotal * (1 + urgencyTax);
+            }
+
+            const updatedOrcamentoResponse = await OrcamentoModel.updateBudget(id as string, subtotal)
+
+            if (!updatedOrcamentoResponse) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "Erro ao calcular orçamento",
+                    data: null
+                });
+            }
+            return res.status(200).json({
+                status: "success",
+                message: "Orçamento calculado com sucesso",
+                data: updatedOrcamentoResponse
             });
         }
+    },
+    
 
-        const total = await OrcamentoModel.calcularTotal(id as string);
 
-        if (total === null) {
-            return res.status(400).json({
-                status: "error",
-                message: "Erro ao calcular orçamento",
-                data: null
-            });
-        }
+async delete (req: Request, res: Response) {
+            const { id } = req.params
 
-        return res.status(200).json({
-            status: "success",
-            message: "Total calculado com sucesso",
-            data: total
-        });
+            if (!id) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "ID obrigatorio",
+                    data: null
+                })
+            }
 
-    } catch (error) {
-        return res.status(500).json({
-            status: "error",
-            message: "Erro interno",
-            data: error
-        });
-    }
-},
+            const deleteOrcamentoResponse = await OrcamentoModel.delete(id as string)
 
-async delete(req: Request, res: Response) {
-        const { id } = req.params
+            if (!deleteOrcamentoResponse) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "Erro ao apagar orcamento",
+                    data: null
+                })
+            }
 
-        if (!id) {
-            return res.status(400).json({
-                status: "error",
-                message: "ID obrigatorio",
-                data: null
+            return res.status(200).json({
+                status: "success",
+                message: "Orcamento apagado com sucesso",
+                data: deleteOrcamentoResponse
             })
         }
-
-        const deleteOrcamentoResponse = await OrcamentoModel.delete(id as string)
-
-        if (!deleteOrcamentoResponse) {
-            return res.status(400).json({
-                status: "error",
-                message: "Erro ao apagar orcamento",
-                data: null
-            })
-        }
-
-        return res.status(200).json({
-            status: "success",
-            message: "Orcamento apagado com sucesso",
-            data: deleteOrcamentoResponse
-        })
     }
-}
 
 
-    
-    
+

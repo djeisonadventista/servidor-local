@@ -148,3 +148,16 @@ export interface UserDBType {
     update_at: Date;
 }
 
+export enum EstadoProposta {
+    PENDENTE = "PENDENTE",
+    ACEITE = "ACEITE",
+    RECUSADA = "RECUSADA"
+}
+
+export enum EstadoPrestacaoServico {
+    PENDENTE = "PENDENTE",
+    EM_PROGRESSO = "EM_PROGRESSO",
+    FINALIZADO = "FINALIZADO",
+    CANALIZADO = "CANALIZADO"
+}
+

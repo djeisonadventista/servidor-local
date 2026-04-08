@@ -1,3 +1,4 @@
+import type { RowDataPacket } from "mysql2"
 import db from "../lib/db.js"
 import type { PrestacaoServicoDBType } from "../utils/types.js"
 import { generateUUID } from "../utils/uuid.js"
@@ -111,15 +112,15 @@ export const PrestacaoServicoModel = {
     },
 
     // trabalho final..................................................
-    async getByIdOrcamento(id_orcamento: string) {
+    async getByIdOrcamento(idOrcamento: string): Promise<PrestacaoServicoDBType | null> {
         try {
-            const [rows] = await db.execute(
+            const [rows] = await db.execute<PrestacaoServicoDBType[] & RowDataPacket[]>  (
                 `SELECT * FROM tbl_prestacao_servico 
             WHERE tbl_prestacao_servico.id_orcamento = ?`,
-                [id_orcamento]
+                [idOrcamento]
             )
             if (Array.isArray(rows) && rows.length === 0) return null
-            return Array.isArray(rows) ? rows[0] : null
+            return Array.isArray(rows) ? rows[0] as PrestacaoServicoDBType : null
         }
         catch (error) {
             console.log(error)
