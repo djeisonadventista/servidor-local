@@ -143,6 +143,19 @@ export const OrcamentoModel = {
         }
     },
 
+    async updateBudget(id: string, total: number) {
+        try {
+            const rows: any = await db.execute(
+                `UPDATE tbl_orcamento SET total = ?, updated_at = ? WHERE id = ?`,
+                [total, new Date(), id]
+            );
+            return rows[0].affectedRows === 0 ? null : rows[0];
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+    },
+
 
     async delete(id: string) {
         try {

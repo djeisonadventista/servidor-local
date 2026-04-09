@@ -146,7 +146,7 @@ export const PropostaModel = {
 
     // trabalho final..................................................
 
-    async getByPrestacaoServico(idPrestacaoServico: string): Promise<PropostaDBType | null> {
+    async getByPrestacaoServico(idPrestacaoServico: string): Promise<PropostaDBType[] | null> {
         try {
             const [rows] = await db.execute<PropostaDBType[] & RowDataPacket[]>(
                 `SELECT * FROM tbl_proposta 
@@ -154,7 +154,7 @@ export const PropostaModel = {
                 [idPrestacaoServico]
             )
             if (Array.isArray(rows) && rows.length === 0) return null
-            return Array.isArray(rows) ? rows[0] as PropostaDBType : null
+            return Array.isArray(rows) ? rows as PropostaDBType[] : null
         } catch (err) {
             console.log(err)
             return null

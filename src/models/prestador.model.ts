@@ -36,7 +36,7 @@ export const PrestadorModel = {
         return rows
     },
 
-    async get(id: string) {
+    async get(id: string): Promise<PrestadorDBType | null> {
         try {
             const [rows] = await db.execute(
                 `SELECT * FROM tbl_prestadores 
@@ -46,7 +46,7 @@ export const PrestadorModel = {
             )
 
             if (Array.isArray(rows) && rows.length === 0) return null
-            return Array.isArray(rows) ? rows[0] : null
+            return Array.isArray(rows) ? rows[0] as PrestadorDBType : null
         } catch (err) {
             console.log(err)
             return null
