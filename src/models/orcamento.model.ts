@@ -1,12 +1,13 @@
+import type { RowDataPacket } from "mysql2"
 import db from "../lib/db.js"
 import type { OrcamentoDBType } from "../utils/types.js"
 import { generateUUID } from "../utils/uuid.js"
 
 
 export const OrcamentoModel = {
-    async create(orcamento: OrcamentoDBType) {
+    async create(orcamento: OrcamentoDBType): Promise<OrcamentoDBType | null> {
         try {
-            const [rows] = await db.execute(
+            const [rows] = await db.execute<OrcamentoDBType & RowDataPacket[]>(
                 `INSERT INTO tbl_orcamento
                 VALUES (?, ?, ?, ?, ?, ?)`,
 
@@ -20,22 +21,22 @@ export const OrcamentoModel = {
                 ]
             )
             console.log({ rows })
-            return rows
+            return rows as OrcamentoDBType
         } catch (err) {
             console.log(err)
             return null
         }
     },
 
-    async getAll() {
-        const [rows] = await db.execute("SELECT * FROM tbl_orcamento")
+    async getAll(): Promise<OrcamentoDBType[] | null> {
+        const [rows] = await db.execute<OrcamentoDBType[] & RowDataPacket[]>("SELECT * FROM tbl_orcamento")
 
-        return rows
+        return rows as OrcamentoDBType[]
     },
 
-    async get(id: string) {
+    async get(id: string): Promise<OrcamentoDBType | null> {
         try {
-            const [rows] = await db.execute(
+            const [rows] = await db.execute<OrcamentoDBType & RowDataPacket[]>(
                 `SELECT * FROM tbl_orcamento 
                 WHERE tbl_orcamento.id = ?`,
 
@@ -43,7 +44,7 @@ export const OrcamentoModel = {
             )
 
             if (Array.isArray(rows) && rows.length === 0) return null
-            return Array.isArray(rows) ? rows[0] : null
+            return Array.isArray(rows) ? rows[0] as OrcamentoDBType : null
         } catch (err) {
             console.log(err)
             return null

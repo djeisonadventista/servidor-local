@@ -1,5 +1,5 @@
 import type { Request, Response } from "express"
-import type { PrestadorDBType } from "../utils/types.js"
+import type { PrestadorDBType, ResponseType } from "../utils/types.js"
 import { PrestadorModel } from "../models/prestador.model.js"
 
 export const PrestadorController = {
@@ -14,7 +14,7 @@ export const PrestadorController = {
             })
         }
 
-        const createPrestadorResponse = await PrestadorModel.create(prestador)
+        const createPrestadorResponse: PrestadorDBType | null = await PrestadorModel.create(prestador)
 
         if (!createPrestadorResponse) {
             return res.status(500).json({
@@ -24,29 +24,32 @@ export const PrestadorController = {
             })
         }
 
-        return res.status(201).json({
+        const response: ResponseType<PrestadorDBType> = {
             status: "success",
             message: "Prestador criado com sucesso",
             data: createPrestadorResponse
-        })
+        }
+        return res.status(201).json(response)
     },
 
     async getAll(req: Request, res: Response) {
-        const getAllPrestadoresResponse = await PrestadorModel.getAll()
+        const getAllPrestadoresResponse: PrestadorDBType[] | null = await PrestadorModel.getAll()
 
         if (!getAllPrestadoresResponse) {
-            return res.status(500).json({
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "Erro ao buscar prestadores",
                 data: null
-            })
+            }
+            return res.status(500).json(response)
         }
 
-        return res.status(200).json({
+        const response: ResponseType<PrestadorDBType[]> = {
             status: "success",
             message: "Prestadores buscados com sucesso",
             data: getAllPrestadoresResponse
-        })
+        }
+        return res.status(200).json(response)
     },
 
     async get(req: Request, res: Response) {

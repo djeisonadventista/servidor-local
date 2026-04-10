@@ -18,7 +18,7 @@ export const OrcamentoController = {
             })
         }
 
-        const createOrcamentoResponse = await OrcamentoModel.create(orcamento)
+        const createOrcamentoResponse: OrcamentoDBType | null = await OrcamentoModel.create(orcamento)
 
         if (!createOrcamentoResponse) {
             return res.status(500).json({
@@ -28,29 +28,32 @@ export const OrcamentoController = {
             })
         }
 
-        return res.status(201).json({
+        const response: ResponseType<OrcamentoDBType> = {
             status: "success",
             message: "Orcamento criado com sucesso",
             data: createOrcamentoResponse
-        })
+        };
+        return res.status(201).json(response);
     },
 
     async getAll(req: Request, res: Response) {
-        const getAllOrcamentosResponse = await OrcamentoModel.getAll()
+        const getAllOrcamentosResponse: OrcamentoDBType[] | null = await OrcamentoModel.getAll()
 
         if (!getAllOrcamentosResponse) {
-            return res.status(500).json({
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "Erro ao buscar orcamentos",
                 data: null
-            })
+            }
+            return res.status(500).json(response)
         }
 
-        return res.status(200).json({
+        const response: ResponseType<OrcamentoDBType[]> = {
             status: "success",
             message: "Orcamentos buscados com sucesso",
             data: getAllOrcamentosResponse
-        })
+        }
+        return res.status(200).json(response)
     },
 
     async get(req: Request, res: Response) {

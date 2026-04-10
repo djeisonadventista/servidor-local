@@ -6,9 +6,9 @@ import { ca } from "date-fns/locale"
 
 
 export const PrestacaoServicoModel = {
-    async create(prestacaoServico: PrestacaoServicoDBType) {
+    async create(prestacaoServico: PrestacaoServicoDBType): Promise<PrestacaoServicoDBType | null> {
         try {
-            const [rows] = await db.execute(
+            const [rows] = await db.execute<PrestacaoServicoDBType & RowDataPacket []>(
                 `INSERT INTO tbl_prestacao_servico 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 
@@ -28,22 +28,22 @@ export const PrestacaoServicoModel = {
                 ]
             )
             console.log({ rows })
-            return rows
+            return rows as PrestacaoServicoDBType
         } catch (err) {
             console.log(err)
             return null
         }
     },
 
-    async getAll() {
-        const [rows] = await db.execute("SELECT * FROM tbl_prestacao_servico")
+    async getAll(): Promise<PrestacaoServicoDBType[] | null> {
+        const [rows] = await db.execute<PrestacaoServicoDBType[] & RowDataPacket[]>("SELECT * FROM tbl_prestacao_servico")
 
-        return rows
+        return rows as PrestacaoServicoDBType[]
     },
 
-    async get(id: string) {
+    async get(id: string): Promise<PrestacaoServicoDBType | null> {
         try {
-            const [rows] = await db.execute(
+            const [rows] = await db.execute<PrestacaoServicoDBType & RowDataPacket[]>(
                 `SELECT * FROM tbl_prestacao_servico 
                 WHERE tbl_prestacao_servico.id = ?`,
 
@@ -51,7 +51,7 @@ export const PrestacaoServicoModel = {
             )
 
             if (Array.isArray(rows) && rows.length === 0) return null
-            return Array.isArray(rows) ? rows[0] : null
+            return Array.isArray(rows) ? rows[0] as PrestacaoServicoDBType : null
         } catch (err) {
             console.log(err)
             return null
@@ -160,6 +160,7 @@ export const PrestacaoServicoModel = {
             console.log(error)
             return null
         }
-    }
+    },
+    
 
 }

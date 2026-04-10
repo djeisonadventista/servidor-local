@@ -6,9 +6,9 @@ import { generateUUID } from "../utils/uuid.js"
 
 
 export const PropostaModel = {
-    async create(proposta: PropostaDBType) {
+    async create(proposta: PropostaDBType): Promise<PropostaDBType | null> {
         try {
-            const [rows] = await db.execute(
+            const [rows] = await db.execute<PropostaDBType & RowDataPacket[]>(
                 `INSERT INTO tbl_proposta 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
 
@@ -24,22 +24,22 @@ export const PropostaModel = {
                 ]
             )
             console.log({ rows })
-            return rows
+            return rows as PropostaDBType
         } catch (err) {
             console.log(err)
             return null
         }
     },
 
-    async getAll() {
+    async getAll(): Promise<PropostaDBType[] | null> {
         const [rows] = await db.execute("SELECT * FROM tbl_proposta")
 
-        return rows
+        return rows as PropostaDBType[]
     },
 
-    async get(id: string) {
+    async get(id: string): Promise<PropostaDBType | null> {
         try {
-            const [rows] = await db.execute(
+            const [rows] = await db.execute<PropostaDBType & RowDataPacket[]>(
                 `SELECT * FROM tbl_proposta
                 WHERE tbl_propostas.id = ?`,
 
@@ -47,7 +47,7 @@ export const PropostaModel = {
             )
 
             if (Array.isArray(rows) && rows.length === 0) return null
-            return Array.isArray(rows) ? rows[0] : null
+            return Array.isArray(rows) ? rows[0] as PropostaDBType : null
         } catch (err) {
             console.log(err)
             return null

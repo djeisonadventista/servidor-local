@@ -1,5 +1,5 @@
 import type { Request, Response } from "express"
-import type { PrestacaoServicoDBType } from "../utils/types.js"
+import type { PrestacaoServicoDBType, ResponseType } from "../utils/types.js"
 import { PrestacaoServicoModel } from "../models/prestacao-servico.model.js"
 
 export const PrestacaoServicoController = {
@@ -14,7 +14,7 @@ export const PrestacaoServicoController = {
             })
         }
 
-        const createPrestacaoServicoResponse = await PrestacaoServicoModel.create(prestacaoServico)
+        const createPrestacaoServicoResponse: PrestacaoServicoDBType | null = await PrestacaoServicoModel.create(prestacaoServico)
 
         if (!createPrestacaoServicoResponse) {
             return res.status(500).json({
@@ -24,29 +24,33 @@ export const PrestacaoServicoController = {
             })
         }
 
-        return res.status(201).json({
+        const response: ResponseType<PrestacaoServicoDBType> = {
             status: "success",
             message: "Prestacao de servico criada com sucesso",
             data: createPrestacaoServicoResponse
-        })
+        };
+        
+        return res.status(201).json(response)
     },
 
     async getAll(req: Request, res: Response) {
-        const getAllPrestacaoServicosResponse = await PrestacaoServicoModel.getAll()
+        const getAllPrestacaoServicosResponse: PrestacaoServicoDBType[] | null = await PrestacaoServicoModel.getAll()
 
         if (!getAllPrestacaoServicosResponse) {
-            return res.status(500).json({
+const response: ResponseType<null> = {
                 status: "error",
                 message: "Erro ao buscar prestacoes de servico",
                 data: null
-            })
+            }
+            return res.status(500).json(response)
         }
-
-        return res.status(200).json({
+        
+const response: ResponseType<PrestacaoServicoDBType[]> = {
             status: "success",
             message: "Prestacoes de servico buscadas com sucesso",
             data: getAllPrestacaoServicosResponse
-        })
+        }
+        return res.status(200).json(response)
     },
 
     async get(req: Request, res: Response) {
@@ -141,5 +145,33 @@ export const PrestacaoServicoController = {
             message: "Prestacao de servico apagada com sucesso",
             data: deletePrestacaoServicoResponse
         })
+    },
+
+    async getAllPrestacaoServicoDetalhado(req: Request, res: Response) {
+        const {limit, offset} = req.query as {limit?: string, offset?: string}
+
+        let LIMIT = 10
+        let OFFSET = 0
+
+        if (limit && parseInt (limit) > 0) LIMIT = parseInt(limit)
+
+        if (offset && parseInt(offset) > 0) OFFSET = parseInt(offset)
+ 
+        const getAllPestacaoSerevicoResponse = await PrestacaoServicoModel.getAllPrestacaoServicoDetalhado(LIMIT, OFFSET)
+
+        if (!getAllPestacaoSerevicoResponse) {
+            return res.status(500).json({
+                status: "error",
+                message: "Erro ao buscar prestacoes de servico",
+                data: null
+            })
+        }
+
+        return res.status(200).json({
+            status: "success",
+            message: "Prestacoes de servico detalhadas buscadas com sucesso",
+            data: getAllPestacaoSerevicoResponse
+        })
+
     }
 }
