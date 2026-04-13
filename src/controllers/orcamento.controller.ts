@@ -70,7 +70,7 @@ export const OrcamentoController = {
             return res.status(400).json(response)
         }
 
-        const getOrcamentoByIdResponse = await OrcamentoModel.get(id as string)
+        const getOrcamentoByIdResponse: OrcamentoDBType | null = await OrcamentoModel.get(id as string)
 
         if (!getOrcamentoByIdResponse) {
             const response: ResponseType<null> = {
@@ -123,7 +123,7 @@ export const OrcamentoController = {
             return res.status(400).json(response)
         }
 
-        const response: ResponseType<OrcamentoDBType> = {
+        const response: ResponseType<OrcamentoDBType>= {
             status: "success",
             message: "Orcamento atualizado com sucesso",
             data: updateOrcamentoResponse

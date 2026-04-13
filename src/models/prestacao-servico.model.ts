@@ -89,23 +89,23 @@ export const PrestacaoServicoModel = {
                 ]
             )
             console.log({ rows })
-            return rows
+            return rows as PrestacaoServicoDBType[]
         } catch (err) {
             console.log(err)
             return null
         }
     },
 
-    async delete(id: string) {
+    async delete(id: string): Promise<PrestacaoServicoDBType | null> {
         try {
-            const rows: any = await db.execute(
+            const rows: any = await db.execute<PrestacaoServicoDBType & RowDataPacket[]>(
                 `DELETE FROM tbl_prestacao_servico 
                 WHERE id = ?`,
 
                 [id]
             )
 
-            return rows[0].affectedRows === 0 ? null : rows[0]
+            return rows[0].affectedRows === 0 ? null : rows[0] as PrestacaoServicoDBType
         } catch (err) {
             console.log(err)
             return null
@@ -129,7 +129,7 @@ export const PrestacaoServicoModel = {
         }
     },
 
-    async getAllPrestacaoServicoDetalhado(limit: number, offset: number) {
+    async getAllPrestacaoServicoDetalhado(limit: number, offset: number) : Promise<PrestacaoServicoDetalhadoType[] | null> {
         try {
             const query = `
             SELECT 

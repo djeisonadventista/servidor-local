@@ -8,63 +8,79 @@ import jwt from "jsonwebtoken";
 export const UsersController = {
 
     //  Criar utilizador
-    async create(req: Request, res: Response) {
-        try {
-            const user = req.body;
+    async createUsers(req: Request, res: Response) {
+        const user: UserDBType = req.body;
 
-            if (!user) {
+        if (!user) {
+            const response: ResponseType<null> = {
+                status: "error",
+                message: "Campos obrigatórios em falta",
+                data: null,
+            };
+            return res.status(400).json(response);
+        }
+
+        const createUserResponse = await UsersModel.create(user)
+
+        const response: ResponseType<UserDBType> = {
+            status: "success",
+            message: "Utilizador criado com sucesso!",
+            data: createUserResponse,
+        };
+        return res.status(201).json(response);
+    },
+
+    //  Buscar todos utilizadores
+    async getAll(req: Request, res: Response) {
+        const getAllUsersResponse = await UsersModel.getAll();
+
+        if (!getAllUsersResponse) {
+            const response: ResponseType<UserDBType[]> = {
+                status: "success",
+                message: "Utilizadores encontrados com sucesso!",
+                data: getAllUsersResponse,
+            };
+            return res.status(200).json(response);
+
+        }
+        const response: ResponseType<null> = {
+            status: "error",
+            message: "Erro ao buscar utilizadores",
+            data: null,
+        };
+        return res.status(500).json(response);
+
+    },
+
+    //  Buscar utilizador por ID
+    async getById(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+
+            if (!id) {
                 const response: ResponseType<null> = {
                     status: "error",
-                    message: "Campos obrigatórios em falta",
+                    message: "ID do utilizador é obrigatório",
                     data: null,
                 };
                 return res.status(400).json(response);
             }
 
-            //  hash da password
-            const hashedPassword = await hashPassword(user.password);
+            const getUserByIdResponse = await getUserById(id as string);
 
-            const insertUserResponse = await createUser(
-                user.id,
-                user.nome,
-                user.numero_identidade,
-                user.data_nascimento,
-                user.email,
-                hashedPassword,
-                user.telefone,
-                user.pais,
-                user.localidade,
-                user.enabled,
-                user.created_at,
-                user.updated_at,
-            );
-            const response: ResponseType<PropostaDBType> = {
+            if (!getUserByIdResponse) {
+                const response: ResponseType<null> = {
+                    status: "error",
+                    message: "Utilizador não encontrado",
+                    data: null,
+                };
+                return res.status(404).json(response);
+            }
+
+            const response: ResponseType<UserDBType> = {
                 status: "success",
-                message: "Utilizador criado com sucesso!",
-                data: insertUserResponse,
-            };
-            return res.status(201).json(response);
-        },
-
-    } catch(error) {
-        console.error(error);
-        const response: ResponseType<null> = {
-            status: "error",
-            message: "Erro interno ao criar utilizador",
-            data: null,
-        };
-        return res.status(500).json(response);
-    }
-},
-
-    //  Buscar todos utilizadores
-    async getAll(req: Request, res: Response) {
-        try {
-            const getUsersResponse = await getUsers();
-const response: ResponseType<UserDBType[]> = {
-                status: "success",
-                message: "Utilizadores encontrados com sucesso!",
-                data: getUsersResponse,
+                message: "Utilizador encontrado com sucesso!",
+                data: getUserByIdResponse,
             };
             return res.status(200).json(response);
 
@@ -72,59 +88,15 @@ const response: ResponseType<UserDBType[]> = {
             console.error(error);
             const response: ResponseType<null> = {
                 status: "error",
-                message: "Erro ao buscar utilizadores",
+                message: "Erro interno",
                 data: null,
             };
             return res.status(500).json(response);
         }
     },
 
-        //  Buscar utilizador por ID
-        async getById(req: Request, res: Response) {
-    try {
-        const { id } = req.params;
-
-        if (!id) {
-            const response: ResponseType<null> = {
-                status: "error",
-                message: "ID do utilizador é obrigatório",
-                data: null,
-            };
-            return res.status(400).json(response);
-        }
-
-        const getUserByIdResponse = await getUserById(id as string);
-
-        if (!getUserByIdResponse) {
-            const response: ResponseType<null> = {
-                status: "error",
-                message: "Utilizador não encontrado",
-                data: null,
-            };
-            return res.status(404).json(response);
-        }
-
-        const response: ResponseType<UserDBType> = {
-            status: "success",
-            message: "Utilizador encontrado com sucesso!",
-            data: getUserByIdResponse,
-        };
-        return res.status(200).json(response);
-
-    } catch (error) {
-        console.error(error);
-        const response: ResponseType<null> = {
-            status: "error",
-            message: "Erro interno",
-            data: null,
-        };
-        return res.status(500).json(response);
-    }
-},
-
     //  LOGIN
     async login(req: Request, res: Response) {
-    try {
         const { email, password } = req.body;
 
         if (!email || !password) {
@@ -134,11 +106,6 @@ const response: ResponseType<UserDBType[]> = {
                 data: null,
             };
             return res.status(400).json(response);
-        }
-                status: "error",
-                message: "Credenciais inválidas",
-                data: null,
-            });
         }
 
         const userData = await UsersModel.getByEmail(email);
@@ -167,7 +134,7 @@ const response: ResponseType<UserDBType[]> = {
             };
             return res.status(401).json(response);
         }
-        
+
 
         const payload = {
             id: userData.id,
@@ -187,49 +154,29 @@ const response: ResponseType<UserDBType[]> = {
             data: {
                 token,
                 user: payload,
-        },
-        return res.status(200).json(response);
-    
+            },
+            return res.status(200).json(response)
+        }
+    },
 
-    } catch (error) {
-        console.error(error);
-        const response: ResponseType<null> = {
-            status: "error",
-            message: "Erro interno no login",
-            data: null,
-        };
-        return res.status(500).json(response);
-    }
-},
-
-    //  UPDATE PASSWORD (SEGURO - com authGuard)
     async updatePassword(req: any, res: Response) {
-    try {
-        const userId = req.user.id; // vem do authGuard
-        const { oldPassword, newPassword } = req.body;
 
-        if (!oldPassword || !newPassword) {
+        const { id } = req.params;
+        const { password, newPassword } = req.body;
+
+        if (!password || !newPassword) {
             const response: ResponseType<null> = {
                 status: "error",
                 message: "Dados obrigatórios em falta",
                 data: null,
             };
             return res.status(400).json(response);
-        
+
         }
 
-        if (newPassword.length < 6) {
-            const response: ResponseType<null> = {
-                status: "error",
-                message: "Password deve ter pelo menos 6 caracteres",
-                data: null
-            };
-            return res.status(400).json(response);
-        }
+        const userData = await UsersModel.getById(id as string)
 
-        const user: UserDBType | null = await UsersModel.get(userId);
-
-        if (!user) {
+        if (!userData) {
             const response: ResponseType<null> = {
                 status: "error",
                 message: "Utilizador não encontrado",
@@ -238,58 +185,44 @@ const response: ResponseType<UserDBType[]> = {
             return res.status(404).json(response);
         }
 
-        console.log("USER:", user);
-        const isValid = await comparePassword(oldPassword, user.password);
+        const isPwdValid = await comparePassword(password, userData!.password)
 
-        if (!isValid) {
+        if (!isPwdValid) {
             const response: ResponseType<null> = {
                 status: "error",
                 message: "Password antiga inválida",
                 data: null
             };
             return res.status(401).json(response);
-            });
         }
 
-        const hashedPassword = await hashPassword(newPassword);
+        const updatePasswordResponse = await UsersModel.updatePassword(userData.id, await hashPassword(newPassword))
 
-        await UsersModel.updatePassword(userId, hashedPassword);
+        if (!updatePasswordResponse) {
+            const response: ResponseType<UserDBType> = {
+                status: "success",
+                message: "Password atualizada com sucesso",
+                data: updatePasswordResponse
+            }
+            return res.status(200).json(response);
+        }
 
-        return res.status(200).json({
-            status: "success",
-            message: "Password atualizada com sucesso",
-            data: null
-        });
-
-    } catch (error) {
-        console.error(error);
         const response: ResponseType<null> = {
             status: "error",
             message: "Erro interno",
             data: null
         };
         return res.status(500).json(response);
-    }
-},
+    },
 
     //  RESET PASSWORD (VERSÃO SIMPLES)
     async resetPassword(req: Request, res: Response) {
-    try {
         const { email, newPassword } = req.body;
 
         if (!email || !newPassword) {
             const response: ResponseType<null> = {
                 status: "error",
                 message: "Dados obrigatórios em falta",
-                data: null
-            };
-            return res.status(400).json(response);
-        }
-
-        if (newPassword.length < 6) {
-            const response: ResponseType<null> = {
-                status: "error",
-                message: "Password deve ter pelo menos 6 caracteres",
                 data: null
             };
             return res.status(400).json(response);
@@ -316,22 +249,11 @@ const response: ResponseType<UserDBType[]> = {
             data: null
         };
         return res.status(200).json(response);
-
-    } catch (error) {
-        console.error(error);
-        const response: ResponseType<null> = {
-            status: "error",
-            message: "Erro interno",
-            data: null
-        };
-        return res.status(500).json(response);
-    }
-},
+    },
 
 
     //  Atualizar utilizador
     async update(req: Request, res: Response) {
-    try {
         const { id } = req.params;
         const updatedUser: userType = req.body;
 
@@ -363,7 +285,6 @@ const response: ResponseType<UserDBType[]> = {
             };
             return res.status(400).json(response);
         }
-        }
 
         const response: ResponseType<UserDBType> = {
             status: "success",
@@ -371,21 +292,10 @@ const response: ResponseType<UserDBType[]> = {
             data: updateUserResponse
         };
         return res.status(200).json(response);
-
-    } catch (error) {
-        console.error(error);
-        const response: ResponseType<null> = {
-            status: "error",
-            message: "Erro interno",
-            data: null,
-        };
-        return res.status(500).json(response);
-    }
-},
+    },
 
     //  Apagar utilizador
-    async delete (req: Request, res: Response) {
-    try {
+    async delete(req: Request, res: Response) {
         const { id } = req.params;
 
         if (!id) {
@@ -415,15 +325,6 @@ const response: ResponseType<UserDBType[]> = {
         };
         return res.status(200).json(response);
     },
-
-} catch (error) {
-    console.error(error);
-    const response: ResponseType<null> = {
-        status: "error",
-        message: "Erro interno",
-        data: null,
-    };
-    return res.status(500).json(response);
 }
-        }
+
 

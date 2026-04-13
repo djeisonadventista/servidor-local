@@ -56,7 +56,7 @@ export const PropostaModel = {
 
     async update(id: string, proposta: PropostaDBType) {
         try {
-            const [rows] = await db.execute(
+            const [rows] = await db.execute<PropostaDBType & RowDataPacket[]>(
                 `UPDATE tbl_proposta
                 SET id_prestacao_servico = ?, 
                 preco_hora = ?, 
@@ -77,7 +77,7 @@ export const PropostaModel = {
                 ]
             )
             console.log({ rows })
-            return rows
+            return rows as PropostaDBType
         } catch (err) {
             console.log(err)
             return null
@@ -86,17 +86,17 @@ export const PropostaModel = {
 
     // trabalho final..................................................
 
-    async aceitarProposta(id: string) {
+    async aceitarProposta(id: string): Promise<PropostaDBType | null> {
         try {
 
             // 1. marcar proposta como aceite
-            await db.execute(
+            await db.execute<PropostaDBType & RowDataPacket[]>(
                 `UPDATE tbl_proposta SET estado = 'Aceite' WHERE id = ?`,
                 [id]
             );
 
             // 2. buscar proposta
-            const [rows]: any = await db.execute(
+            const [rows]: any = await db.execute<PropostaDBType & RowDataPacket[]>(
                 `SELECT * FROM tbl_proposta WHERE id = ?`,
                 [id]
             );
@@ -104,7 +104,7 @@ export const PropostaModel = {
             const proposta = rows[0];
 
             // 3. atualizar prestacao_servico
-            await db.execute(
+            await db.execute<PropostaDBType & RowDataPacket[]>(
                 `UPDATE tbl_prestacao_servico 
              SET estado = 'Aceite'
              WHERE id = ?`,
@@ -112,14 +112,14 @@ export const PropostaModel = {
             );
 
             // 4. rejeitar restantes propostas
-            await db.execute(
+            await db.execute<PropostaDBType & RowDataPacket[]>(
                 `UPDATE tbl_proposta 
              SET estado = 'Rejeitada'
              WHERE id_prestacao_servico = ? AND id != ?`,
                 [proposta.id_prestacao_servico, id]
             );
 
-            return true;
+            return null;
 
         } catch (error) {
             console.log(error);
@@ -128,16 +128,16 @@ export const PropostaModel = {
     },
 
 
-    async delete(id: string) {
+    async delete(id: string): Promise<PropostaDBType | null> {
         try {
-            const rows: any = await db.execute(
+            const rows: any = await db.execute<PropostaDBType & RowDataPacket[]>(
                 `DELETE FROM tbl_proposta 
                 WHERE id = ?`,
 
                 [id]
             )
 
-            return rows[0].affectedRows === 0 ? null : rows[0]
+            return rows[0].affectedRows === 0 ? null : rows[0] as PropostaDBType
         } catch (err) {
             console.log(err)
             return null
@@ -161,18 +161,18 @@ export const PropostaModel = {
         }
     },
 
-    async acceptProposal(id: string) {
+    async acceptProposal(id: string): Promise<PropostaDBType | null> {
         try {
-            const [rows] = await db.execute(
+            const [rows] = await db.execute<PropostaDBType & RowDataPacket[]>(
                 `UPDATE tbl_proposta 
                 SET estado = 'ACEITE' 
                 WHERE id = ?`,
-                [id]            )
-            return rows
+                [id])
+            return rows as PropostaDBType
         } catch (err) {
             console.log(err)
             return null
         }
 
-}
+    }
 }

@@ -3,36 +3,33 @@ import { formatDateDDMMYYYY } from "../utils/data.js";
 import { hashPassword } from "../utils/password.js";
 import { generateUUID } from "../utils/uuid.js";
 import type { UserDBType, userType } from "../utils/types.js";
+import type { RowDataPacket } from "mysql2";
 
 export const UsersModel = {
 
     async create(newUser: userType) {
         try {
 
-            const query = `
+            const [rows] = await db.execute<UserDBType & RowDataPacket[]>(`
             INSERT INTO tbl_utilizadores
             (id, nome, numero_identidade, data_nascimento, email, password, telefone, pais, localidade, enebled, created_at, update_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            `;
-
-            const values = [
-                generateUUID(),
-                newUser.nome,
-                newUser.numero_identidade,
-                formatDateDDMMYYYY(newUser.data_nascimento),
-                newUser.email,
-                await hashPassword(newUser.password),
-                newUser.telefone,
-                newUser.pais,
-                newUser.localidade,
-                newUser.enebled,
-                new Date(),
-                new Date()
-            ];
-
-            const [rows] = await db.execute(query, values);
-
-            return rows;
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [
+                    generateUUID(),
+                    newUser.nome,
+                    newUser.numero_identidade,
+                    formatDateDDMMYYYY(newUser.data_nascimento),
+                    newUser.email,
+                    await hashPassword(newUser.password),
+                    newUser.telefone,
+                    newUser.pais,
+                    newUser.localidade,
+                    newUser.enebled,
+                    new Date(),
+                    new Date()
+                ]
+            )
+            return rows as UserDBType;
 
         } catch (error) {
             console.log(error);
@@ -62,13 +59,28 @@ export const UsersModel = {
 
             const values = [id];
 
-            const rows:any = await db.execute(query, values);
+            const rows: any = await db.execute(query, values);
 
             return Array.isArray(rows) && rows.length > 0 ? rows[0] : null;
 
         } catch (error) {
             console.log(error);
             return null;
+        }
+    },
+
+    async getById(id: string): Promise<UserDBType | null> {
+        try {
+            const [rows] = await db.execute(
+                `SELECT * FROM tbl_utilizadores WHERE tbl_utilizadores.id = ?`, [id]
+
+            )
+
+            if (Array.isArray(rows) && rows.length === 0) return null
+            return Array.isArray(rows) ? rows[0] as UserDBType : null
+        } catch (err) {
+            console.log(err)
+            return null
         }
     },
 
@@ -99,9 +111,9 @@ export const UsersModel = {
         SET password = ?, update_at = ?
         WHERE id = ?
         `;
-
+            const hasPassword = await hashPassword(newPassword);
             const values = [
-                await hashPassword(newPassword),
+                hasPassword,
                 new Date(),
                 id
             ];
@@ -116,7 +128,21 @@ export const UsersModel = {
         }
     },
 
-    
+    async resetPassword(id: string, newPassword: string): Promise<UserDBType | null> {
+        try {
+            const query = "tbl_utilizadores SET password=?, updated_at=? WHERE id=?";
+
+            const hasPassword = await hashPassword(newPassword)
+            const value = [hasPassword, new Date(), id]
+
+            //User se existe
+            const [rows] = await db.execute<UserDBType[] & RowDataPacket[]>(query, value);
+            return rows[0] as UserDBType;
+        } catch (error) {
+            return null
+        }
+    },
+
     async update(id: string, updatedUser: userType) {
         try {
 

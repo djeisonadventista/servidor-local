@@ -79,23 +79,23 @@ export const PrestadorModel = {
                 ]
             )
             console.log({ rows })
-            return rows
+            return rows as PrestadorDBType[]
         } catch (err) {
             console.log(err)
             return null
         }
     },
 
-    async delete(id: string) {
+    async delete(id: string): Promise<PrestadorDBType | null> {
         try {
-            const rows: any = await db.execute(
+            const rows: any = await db.execute<PrestadorDBType & RowDataPacket[]>(
                 `DELETE FROM tbl_prestadores 
                 WHERE id = ?`,
 
                 [id]
             )
 
-            return rows[0].affectedRows === 0 ? null : rows[0]
+            return rows[0].affectedRows === 0 ? null : rows[0] as PrestadorDBType
         } catch (err) {
             console.log(err)
             return null

@@ -1,7 +1,7 @@
 import type { RowDataPacket } from "mysql2"
 import db from "../lib/db.js"
 import type { ServiceDBType, ServicoDetalhadoType } from "../utils/types.js"
-import { ro } from "date-fns/locale"
+
 
 export const ServiceModel = {
     async Create(newService: ServiceDBType): Promise<ServiceDBType | null> {
@@ -34,7 +34,7 @@ export const ServiceModel = {
 
             const [rows] = await db.execute<ServiceDBType & RowDataPacket[]>(query)
 
-            return Array.isArray(rows) && rows.length > 0 ? rows[0] as ServiceDBType : []
+            return Array.isArray(rows) && rows.length > 0 ? rows[0] as ServiceDBType[] : []
 
         } catch (error) {
             console.log(error);
@@ -82,25 +82,25 @@ export const ServiceModel = {
                 new Date(),
                 id
             ]
-            const rows = await db.execute(query, values)
+            const rows = await db.execute<ServiceDBType & RowDataPacket[]>(query, values)
 
-            return rows
+            return rows as ServiceDBType[] 
         } catch (error) {
             console.log(error);
             return null
         }
     },
 
-    async delete(id: string) {
+    async delete(id: string): Promise<ServiceDBType | null> {
         try {
 
             const query = `DELETE  FROM tbl_servicos WHERE id = ?`
 
             const value = [id]
 
-            const rows: any = await db.execute(query, value)
+            const rows: any = await db.execute<ServiceDBType & RowDataPacket[]>(query, value)
 
-            return rows[0]?.affectedRows === 0 ? null : rows
+            return rows[0]?.affectedRows === 0 ? null : rows as ServiceDBType
 
         } catch (error) {
             console.log(error);

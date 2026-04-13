@@ -132,8 +132,8 @@ export const PropostaController = {
     //ACEITAR PROPOSTA 
 
     async aceitar(req: Request, res: Response) {
+        const { id } = req.params;
         try {
-            const { id } = req.params;
 
             if (!id) {
                 const response: ResponseType<null> = {
@@ -144,9 +144,9 @@ export const PropostaController = {
                 return res.status(400).json(response);
             }
 
-            const result = await PropostaModel.aceitarProposta(id as string);
+            const propostaAceitadoResponse = await PropostaModel.aceitarProposta(id as string);
 
-            if (!result) {
+            if (!propostaAceitadoResponse) {
                 const response: ResponseType<null> = {
                     status: "error",
                     message: "Erro ao aceitar proposta",
@@ -158,7 +158,7 @@ export const PropostaController = {
             const response: ResponseType<PropostaDBType> = {
                 status: "success",
                 message: "Proposta aceite com sucesso",
-                data: result
+                data: propostaAceitadoResponse
             };
             return res.status(200).json(response);
 
@@ -166,7 +166,7 @@ export const PropostaController = {
             const response: ResponseType<null> = {
                 status: "error",
                 message: "Erro interno",
-                data: error
+                data: null
             };
             return res.status(500).json(response);
         }

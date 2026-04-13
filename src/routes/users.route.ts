@@ -16,7 +16,7 @@ const UsersRoute = {
 const router = Router();
 
 router.post(UsersRoute.login, UsersController.login);
-router.post(UsersRoute.create, UsersController.create);
+router.post(UsersRoute.create, UsersController.createUsers);
 router.get(UsersRoute.getAll, AuthMiddleware, UsersController.getAll);
 router.get(UsersRoute.getById, UsersController.getById);
 router.put(UsersRoute.update, UsersController.update);

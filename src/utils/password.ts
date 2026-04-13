@@ -8,6 +8,6 @@ export async function comparePassword(passwordEmTexto: string, passwordHash: str
     return await compare (passwordEmTexto, passwordHash)
 }
 
-const texto = "10-12-2010"
-
-texto.split("-")
+export async function updatePassword( passwordEmTexto: string, passwordHash: string) {
+    return await updatePassword (passwordEmTexto, passwordHash)
+}

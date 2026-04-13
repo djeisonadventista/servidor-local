@@ -7,13 +7,13 @@ export const PrestadorController = {
         const prestador: PrestadorDBType = req.body
 
         if (!prestador) {
-          const response: ResponseType<null> = {
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "Dados de prestador invalidos",
                 data: null
             };
-          return res.status(400).json(response);
-            }
+            return res.status(400).json(response);
+        }
 
         const createPrestadorResponse: PrestadorDBType | null = await PrestadorModel.create(prestador)
 
@@ -119,7 +119,7 @@ export const PrestadorController = {
             return res.status(400).json(response);
         }
 
-       const response: ResponseType<PrestadorDBType> = {
+        const response: ResponseType<PrestadorDBType> = {
             status: "success",
             message: "Prestador atualizado com sucesso",
             data: updatePrestadorResponse
