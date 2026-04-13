@@ -1,6 +1,6 @@
 
 import { ServiceModel } from "../models/servico.model.js";
-import type { ServiceDBType } from "../utils/types.js";
+import type { ResponseType, ServiceDBType } from "../utils/types.js";
 import type { Request, Response } from "express";
 
 
@@ -10,76 +10,83 @@ export const ServicoController = {
         const newService: ServiceDBType = req.body
 
         if (!newService) {
-            return res.status(400).json({
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "Dados de sevico invalidos",
                 data: null,
-            });
+            };
+            return res.status(400).json(response);
         }
 
-        const createServiceResponse = await ServiceModel.Create(newService);
+        const createServiceResponse: ServiceDBType | null = await ServiceModel.Create(newService);
 
         if (!createServiceResponse === null) {
-            return res.status(400).json({
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "Erro ao criar servico",
                 data: null,
-            });
+            };
+            return res.status(400).json(response);
         }
 
-
-       return res.status(200).json({
-            status: "sucess",
+const responde: ResponseType<ServiceDBType> = {
+            status: "success",
             message: "servico criado com sucesso",
             data: createServiceResponse,
-        });
+        };
+        return res.status(200).json(responde);
     },
 
     async getAll(req: Request, res: Response) {
-        const getAllServiceResponse = await ServiceModel.getAll()
+        const getAllServiceResponse: ServiceDBType[] | null = await ServiceModel.getAll()
 
 
         if (!getAllServiceResponse) {
-            return res.status(500).json({
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "Erro ao buscar servico",
                 data: null,
-            });
+            };
+            return res.status(500).json(response);
         }
 
-        return res.status(200).json({
-            status: "sucess",
-            message: "servico buscado com sucesso",
+        const response: ResponseType<ServiceDBType[]> = {
+            status: "success",
+            message: "Servico buscado com sucesso",
             data: getAllServiceResponse,
-        });
+        };
+        return res.status(200).json(response);
     },
 
     async get(req: Request, res: Response) {
         const id = req.params.id
 
         if (!id) {
-            return res.status(400).json({
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "ID do servico nao fornecido",
                 data: null,
-            });
+            };
+            return res.status(400).json(response);
         }
 
         const getServiceResponse = await ServiceModel.get(id as string);
 
         if (!getServiceResponse) {
-            return res.status(404).json({
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "Servico nao encontrado",
                 data: null,
-            });
+            };
+            return res.status(404).json(response);
         }
 
-        return res.status(200).json({
-            status: "sucess",
-            message: "servico encontrado com sucesso",
+        const response: ResponseType<ServiceDBType> = {
+            status: "success",
+            message: "Servico encontrado com sucesso",
             data: getServiceResponse,
-        });
+        };
+        return res.status(200).json(response);
     },
 
     async update(req: Request, res: Response) {
@@ -88,64 +95,71 @@ export const ServicoController = {
         const updatedService: ServiceDBType = req.body
 
         if (!id) {
-            return res.status(400).json({
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "ID é obrigatório",
                 data: null,
-            });
+            };
+            return res.status(400).json(response);
         }
 
         if (!updatedService) {
-            return res.status(400).json({
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "Dados de servico invalido",
                 data: null,
-            });
+            };
+            return res.status(400).json(response);
         }
 
         const updateServiceResponse = await ServiceModel.update(id as string, updatedService)
 
         if (!updateServiceResponse) {
-            return res.status(400).json({
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "Erro ao atualizar servico",
                 data: null,
-            });
+            };
+            return res.status(400).json(response);
         }
 
-        return res.status(200).json({
-            status: "sucess",
-            message: "servico atualizado com sucesso",
+        const response: ResponseType<ServiceDBType> = {
+            status: "success",
+            message: "Servico atualizado com sucesso",
             data: updateServiceResponse
-        });
+        };
+        return res.status(200).json(response);
     },
 
     async delete(req: Request, res: Response) {
         const { id } = req.params;
 
         if (!id) {
-            return res.status(400).json({
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "ID  obrigatório",
                 data: null,
-            });
+            };
+            return res.status(400).json(response);
         }
 
         const deleteServiceResponse = await ServiceModel.delete(id as string)
 
         if (!deleteServiceResponse) {
-            return res.status(400).json({
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "Erro ao apagar servico",
                 data: null,
-            });
+            };
+            return res.status(400).json(response);
         }
 
-        return res.status(200).json({
-            status: "sucess",
+        const response: ResponseType<null> = {
+            status: "success",
             message: "Servico apagado com sucesso",
             data: deleteServiceResponse
-        });
+        };
+        return res.status(200).json(response);
     }
 };
 

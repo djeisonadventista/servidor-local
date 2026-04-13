@@ -172,3 +172,16 @@ export interface PrestacaoServicoDetalhadoType {
     data_pedido: string;
     urgente: boolean;
 }
+
+export interface ServicoDetalhadoType {
+    id: string;
+    nome: string;
+    descricao: string;
+    designacao_categoria: string;
+    icone_categoria: string;
+    id_empresa: string;
+    designacao_empresa: string;
+    icone_empresa: string;
+    enabled: boolean;
+
+}

@@ -1,67 +1,69 @@
+import type { RowDataPacket } from "mysql2"
 import db from "../lib/db.js"
-import type { ServiceDBType } from "../utils/types.js"
+import type { ServiceDBType, ServicoDetalhadoType } from "../utils/types.js"
+import { ro } from "date-fns/locale"
 
 export const ServiceModel = {
-    async Create(newService: ServiceDBType) {
-        
-    try {
+    async Create(newService: ServiceDBType): Promise<ServiceDBType | null> {
 
-        const query = `INSERT INTO tbl_servicos VALUES (?, ?, ?, ?, ?, ?, ?)`
+        try {
 
-        const values = [
-            null,
-            newService.nome,
-            newService.descricao,
-            newService.categoria,
-            newService.enabled_at,
-            new Date(),
-            new Date()
-        ]
-        const rows = await db.execute(query, values)
+            const query = `INSERT INTO tbl_servicos VALUES (?, ?, ?, ?, ?, ?, ?)`
 
-        return rows
-    } catch (error) {
-        console.log(error);
-        return null;
-    }
-},
+            const values = [
+                null,
+                newService.nome,
+                newService.descricao,
+                newService.categoria,
+                newService.enabled_at,
+                new Date(),
+                new Date()
+            ]
+            const [rows] = await db.execute<ServiceDBType & RowDataPacket[]>(query, values)
 
- async getAll() {
-    try {
-        const query = `SELECT * FROM tbl_servicos`
+            return rows as ServiceDBType
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+    },
 
-        const rows = await db.execute(query)
+    async getAll(): Promise<ServiceDBType[] | null> {
+        try {
+            const query = `SELECT * FROM tbl_servicos`
 
-        return Array.isArray(rows) && rows.length > 0 ? rows[0] : []
+            const [rows] = await db.execute<ServiceDBType & RowDataPacket[]>(query)
 
-    } catch (error) {
-        console.log(error);
-        return null
-    }
-},
+            return Array.isArray(rows) && rows.length > 0 ? rows[0] as ServiceDBType : []
 
-
-async get (id: string) {
-    try {
-
-        const query = `SELECT * FROM tbl_servicos WHERE id = ?`
-
-        const value = [id]
-
-        const rows = await db.execute(query, value)
-
-        return Array.isArray(rows) && rows.length > 0 ? rows[0] : null
+        } catch (error) {
+            console.log(error);
+            return null
+        }
+    },
 
 
-    } catch (error) {
-        console.log(error);
-        return null
-    }
-},
+    async get(id: string): Promise<ServiceDBType | null> {
+        try {
 
-async update(id: string, servicoAtualizado: ServiceDBType){
-     try {
-        const query = `UPDATE tbl_servicos
+            const query = `SELECT * FROM tbl_servicos WHERE id = ?`
+
+            const value = [id]
+
+            const [rows] = await db.execute<ServiceDBType & RowDataPacket[]>(query, value)
+
+            return Array.isArray(rows) && rows.length > 0 ? rows[0] as ServiceDBType : null
+
+
+        } catch (error) {
+            console.log(error);
+            return null
+        }
+    },
+
+    async update(id: string, servicoAtualizado: ServiceDBType) {
+        try {
+            const query = `UPDATE tbl_servicos
         SET
         nome=?,
         descricao=?,
@@ -72,38 +74,68 @@ async update(id: string, servicoAtualizado: ServiceDBType){
         id=?
         `;
 
-        const values = [
-            servicoAtualizado.nome,
-            servicoAtualizado.descricao,
-            servicoAtualizado.categoria,
-            servicoAtualizado.enabled_at,
-            new Date(),
-            id
-        ]
-        const rows = await db.execute(query, values)
+            const values = [
+                servicoAtualizado.nome,
+                servicoAtualizado.descricao,
+                servicoAtualizado.categoria,
+                servicoAtualizado.enabled_at,
+                new Date(),
+                id
+            ]
+            const rows = await db.execute(query, values)
 
-        return rows
-    } catch (error) {
-        console.log(error);
-        return null
+            return rows
+        } catch (error) {
+            console.log(error);
+            return null
+        }
+    },
+
+    async delete(id: string) {
+        try {
+
+            const query = `DELETE  FROM tbl_servicos WHERE id = ?`
+
+            const value = [id]
+
+            const rows: any = await db.execute(query, value)
+
+            return rows[0]?.affectedRows === 0 ? null : rows
+
+        } catch (error) {
+            console.log(error);
+            return null
+        }
+    },
+
+    async getAllServicoDetalhado(limit: number, offset: number): Promise<ServicoDetalhadoType[] | null> {
+        try {
+            const query = `
+        SELECT 
+        s.id, 
+        s.nome, 
+        s.descricao, 
+        c.designacao as designacao_categoria,
+        c.icone as icone_categoria,
+        e.id as id_empresa,
+        e.designacao as designacao_empresa,
+        e.icone as icone_empresa,
+        s.enabled
+        FROM tbl_servicos s
+        INNER JOIN tbl_categoria c ON c.id = s.id_categoria
+        INNER JOIN tbl_empresa e ON e.id = s.id_empresa
+        LIMIT ? OFFSET ?
+        `
+
+            const values = [limit, offset]
+
+            const [rows] = await db.execute<ServicoDetalhadoType[] & RowDataPacket[]>(query, values)
+
+            return Array.isArray(rows) && rows.length > 0 ? rows as ServicoDetalhadoType[] : null
+
+        } catch (error) {
+            console.log(error);
+            return null
+        }
     }
-},
-
-async delete(id: string) {
-try {
-
-        const query = `DELETE  FROM tbl_servicos WHERE id = ?`
-
-        const value = [id]
-
-        const rows: any = await db.execute(query, value)
-
-        return rows [0]?.affectedRows === 0 ? null : rows
-
-    } catch (error) {
-        console.log(error);
-        return null
-    }
-}
-    
 }

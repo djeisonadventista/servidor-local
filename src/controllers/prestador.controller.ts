@@ -7,21 +7,23 @@ export const PrestadorController = {
         const prestador: PrestadorDBType = req.body
 
         if (!prestador) {
-            return res.status(400).json({
+          const response: ResponseType<null> = {
                 status: "error",
                 message: "Dados de prestador invalidos",
                 data: null
-            })
-        }
+            };
+          return res.status(400).json(response);
+            }
 
         const createPrestadorResponse: PrestadorDBType | null = await PrestadorModel.create(prestador)
 
         if (!createPrestadorResponse) {
-            return res.status(500).json({
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "Erro ao criar prestador",
                 data: null
-            })
+            };
+            return res.status(500).json(response);
         }
 
         const response: ResponseType<PrestadorDBType> = {
@@ -56,28 +58,31 @@ export const PrestadorController = {
         const { id } = req.params
 
         if (!id) {
-            return res.status(400).json({
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "ID obrigatorio",
                 data: null
-            })
+            };
+            return res.status(400).json(response);
         }
 
         const getPrestadorByIdResponse = await PrestadorModel.get(id as string)
 
         if (!getPrestadorByIdResponse) {
-            return res.status(404).json({
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "Prestador nao encontrado",
                 data: null
-            })
+            };
+            return res.status(404).json(response);
         }
 
-        return res.status(200).json({
+        const response: ResponseType<PrestadorDBType> = {
             status: "success",
             message: "Prestador encontrado com sucesso",
             data: getPrestadorByIdResponse
-        })
+        };
+        return res.status(200).json(response);
     },
 
     async update(req: Request, res: Response) {
@@ -86,63 +91,70 @@ export const PrestadorController = {
         const updatedPrestador: PrestadorDBType = req.body
 
         if (!id) {
-            return res.status(400).json({
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "ID obrigatorio",
                 data: null
-            })
+            };
+            return res.status(400).json(response);
         }
 
         if (!updatedPrestador) {
-            return res.status(400).json({
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "Dados de prestador invalidos",
                 data: null
-            })
+            };
+            return res.status(400).json(response);
         }
 
         const updatePrestadorResponse = await PrestadorModel.update(id as string, updatedPrestador)
 
         if (!updatePrestadorResponse) {
-            return res.status(400).json({
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "Erro ao atualizar prestador",
                 data: null
-            })
+            };
+            return res.status(400).json(response);
         }
 
-        return res.status(200).json({
+       const response: ResponseType<PrestadorDBType> = {
             status: "success",
             message: "Prestador atualizado com sucesso",
             data: updatePrestadorResponse
-        })
+        };
+        return res.status(200).json(response);
     },
 
     async delete(req: Request, res: Response) {
         const { id } = req.params
 
         if (!id) {
-            return res.status(400).json({
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "ID obrigatorio",
                 data: null
-            })
+            };
+            return res.status(400).json(response);
         }
 
         const deletePrestadorResponse = await PrestadorModel.delete(id as string)
 
         if (!deletePrestadorResponse) {
-            return res.status(400).json({
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "Erro ao apagar prestador",
                 data: null
-            })
+            };
+            return res.status(400).json(response);
         }
 
-        return res.status(200).json({
+        const response: ResponseType<null> = {
             status: "success",
             message: "Prestador apagado com sucesso",
             data: deletePrestadorResponse
-        })
+        };
+        return res.status(200).json(response);
     }
 }
