@@ -154,16 +154,36 @@ const responde: ResponseType<ServiceDBType> = {
             return res.status(400).json(response);
         }
 
-        const response: ResponseType<null> = {
+        const response: ResponseType<ServiceDBType> = {
             status: "success",
             message: "Servico apagado com sucesso",
             data: deleteServiceResponse
         };
         return res.status(200).json(response);
-    }
-};
+    },
 
+    async getAllServicoDetalhado(req: Request, res: Response) {
+        const  { limit, offset } = req.query
+        let LIMIT = 10
+        let OFFSET = 0
 
+        if(limit) {
+            LIMIT = parseInt(limit as string) 
+        }
 
+        if (offset) {
+            OFFSET = parseInt(offset as string)
+        }
 
+        const getAllServicoDetalhadoResponse = await ServiceModel.getAllServicoDetalhado(LIMIT, OFFSET)
 
+        if (!getAllServicoDetalhadoResponse) {
+            const response: ResponseType<null> = {
+                status: "error",
+                message: "Erro ao buscar servicos detalhados",
+                data: null,
+            };
+            return res.status(404).json(response);
+        }
+}
+}

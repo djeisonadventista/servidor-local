@@ -144,3 +144,38 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ResponseError"
+
+  \service/all-detailed:
+    get:
+      summary: Listar todos os servicos detalhados
+      tags:
+        - service
+      description: Retorna uma lista de todos os servicos disponiveis com detalhes
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          description: Limite de servicos a serem retomados
+          schema:
+            type: integer
+            example: 10
+        - name: offset
+          in: query
+          required: false
+          description: offset de servicos a serem retomados
+          schema:
+            type: integer
+            example: 0
+      responses:
+        "200":
+          description: Lista de servicos detalhados
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServicoDetalhado"
+        "404":
+          description: Nenhum servico encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseError"            

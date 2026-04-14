@@ -1,10 +1,35 @@
+
+export enum Role {
+    CLIENTE = "cliente",
+    ADMIN = "admin",
+    PRESTADOR = "prestador",
+    EMPRESA = "empresa"
+}
+
+export enum EstadoProposta {
+    PENDENTE = "PENDENTE",
+    ACEITE = "ACEITE",
+    RECUSADA = "RECUSADA"
+}
+
+export enum EstadoPrestacaoServico {
+    PENDENTE = "PENDENTE",
+    EM_PROGRESSO = "EM_PROGRESSO",
+    FINALIZADO = "FINALIZADO",
+    CANALIZADO = "CANALIZADO"
+}
+
+export enum TipoPrestador {
+    PARTICULAR = "particular",
+    EMPRESA = "empresa"
+}
+
 export interface pedidoServicoType {
     cliente: string;
     descricao: string;
     horasEstimadas: number;
     urgente: boolean;
 }
-
 
 export interface ServicoType {
     nome: string;
@@ -55,7 +80,7 @@ export interface PropostasType {
     horas_estimadas: string;
     estado: string;
     enabled: boolean;
-    created_at: Date; 
+    created_at: Date;
     updated_at: Date;
 }
 
@@ -81,7 +106,7 @@ export interface PrestadorDBType {
     updated_at: string
 }
 
- export interface ServiceDBType{
+export interface ServiceDBType {
     id: string;
     nome: string;
     descricao: string;
@@ -124,6 +149,8 @@ export interface PrestacaoServicoDBType {
     preco_hora: number,
     estado: string,
     id_orcamento: string,
+    id_empresa: string,
+    tipo_prestador: TipoPrestador,
     urgente: boolean,
     enabled: boolean,
     created_at: string,
@@ -140,22 +167,10 @@ export interface UserDBType {
     telefone: string;
     pais: string;
     localidade: string;
+    role: Role;
     enebled: boolean;
     created_at: Date;
     update_at: Date;
-}
-
-export enum EstadoProposta {
-    PENDENTE = "PENDENTE",
-    ACEITE = "ACEITE",
-    RECUSADA = "RECUSADA"
-}
-
-export enum EstadoPrestacaoServico {
-    PENDENTE = "PENDENTE",
-    EM_PROGRESSO = "EM_PROGRESSO",
-    FINALIZADO = "FINALIZADO",
-    CANALIZADO = "CANALIZADO"
 }
 
 export interface ResponseType<T> {
@@ -184,4 +199,25 @@ export interface ServicoDetalhadoType {
     icone_empresa: string;
     enabled: boolean;
 
+}
+
+export interface CategoriaDBType {
+    id: string;
+    designacao: string;
+    icone: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface EmpresaDBType {
+    id: string;
+    designacao: string;
+    descricao: string;
+    localicacao: string;
+    nif: string;
+    icone: string;
+    id_utilizador: string;
+    enabled: boolean;
+    created_at: string;
+    updated_at: string;
 }

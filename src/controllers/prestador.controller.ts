@@ -150,7 +150,7 @@ export const PrestadorController = {
             return res.status(400).json(response);
         }
 
-        const response: ResponseType<null> = {
+        const response: ResponseType<PrestadorDBType> = {
             status: "success",
             message: "Prestador apagado com sucesso",
             data: deletePrestadorResponse

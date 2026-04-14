@@ -52,6 +52,35 @@ components:
           type: boolean
           example: true
 
+    # schemas  buscar servico detalhado    
+    ServicoDetalhado:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        nome:
+          type: string
+          example: "Servico de limpeza"
+        descricao:
+          type: string
+          example: " Servico de Limpeza Profissional para residentes e empresa"
+        designacao_categoria:
+          type: string
+          example: "Limpeza"
+        icone_categoria:
+          type: string
+          example: ""
+        id_empresa:
+          type: integer
+          example: 1
+        designacao_empresa:
+          type: string
+          example: "Empresa de Limpeza"
+        enabled:
+          type: boolean
+          example: true
+
     # schemas generico para sucesso
     ServiceResponseSucess:
       type: object

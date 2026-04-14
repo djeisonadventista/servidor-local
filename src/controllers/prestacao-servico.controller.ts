@@ -1,5 +1,5 @@
 import type { Request, Response } from "express"
-import type { PrestacaoServicoDBType, ResponseType } from "../utils/types.js"
+import type { PrestacaoServicoDBType, PrestacaoServicoDetalhadoType, ResponseType } from "../utils/types.js"
 import { PrestacaoServicoModel } from "../models/prestacao-servico.model.js"
 
 export const PrestacaoServicoController = {
@@ -166,9 +166,9 @@ export const PrestacaoServicoController = {
 
         if (offset && parseInt(offset) > 0) OFFSET = parseInt(offset)
 
-        const getAllPestacaoSerevicoResponse = await PrestacaoServicoModel.getAllPrestacaoServicoDetalhado(LIMIT, OFFSET)
+        const getAllPestacaoServicoResponse = await PrestacaoServicoModel.getAllPrestacaoServicoDetalhado(LIMIT, OFFSET)
 
-        if (!getAllPestacaoSerevicoResponse) {
+        if (!getAllPestacaoServicoResponse) {
             const response: ResponseType<null> = {
                 status: "error",
                 message: "Erro ao buscar prestacoes de servico",
@@ -177,10 +177,10 @@ export const PrestacaoServicoController = {
             return res.status(500).json(response);
         }
 
-        const response: ResponseType<PrestacaoServicoDBType[]> = {
+        const response: ResponseType<PrestacaoServicoDetalhadoType[]> = {
             status: "success",
             message: "Prestacoes de servico detalhadas buscadas com sucesso",
-            data: getAllPestacaoSerevicoResponse
+            data: getAllPestacaoServicoResponse
         };
         return res.status(200).json(response);
 

@@ -140,6 +140,7 @@ export const UsersController = {
             id: userData.id,
             email: userData.email,
             nome: userData.nome,
+            role: userData.role,
         };
 
         const token = jwt.sign(
@@ -253,7 +254,7 @@ export const UsersController = {
 
 
     //  Atualizar utilizador
-    async update(req: Request, res: Response) {
+    async update(req: Request, res: Response){
         const { id } = req.params;
         const updatedUser: userType = req.body;
 
