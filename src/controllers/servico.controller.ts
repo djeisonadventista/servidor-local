@@ -29,7 +29,7 @@ export const ServicoController = {
             return res.status(400).json(response);
         }
 
-const responde: ResponseType<ServiceDBType> = {
+        const responde: ResponseType<ServiceDBType> = {
             status: "success",
             message: "servico criado com sucesso",
             data: createServiceResponse,
@@ -163,12 +163,12 @@ const responde: ResponseType<ServiceDBType> = {
     },
 
     async getAllServicoDetalhado(req: Request, res: Response) {
-        const  { limit, offset } = req.query
+        const { limit, offset } = req.query
         let LIMIT = 10
         let OFFSET = 0
 
-        if(limit) {
-            LIMIT = parseInt(limit as string) 
+        if (limit) {
+            LIMIT = parseInt(limit as string)
         }
 
         if (offset) {
@@ -185,5 +185,5 @@ const responde: ResponseType<ServiceDBType> = {
             };
             return res.status(404).json(response);
         }
-}
+    }
 }

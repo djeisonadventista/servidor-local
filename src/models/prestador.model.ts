@@ -54,9 +54,9 @@ export const PrestadorModel = {
         }
     },
 
-    async update(id: string, prestador: PrestadorDBType) {
+    async update(id: string, prestador: PrestadorDBType): Promise<PrestadorDBType | null> {
         try {
-            const [rows] = await db.execute(
+            const [rows] = await db.execute<PrestadorDBType & RowDataPacket[]>(
                 `UPDATE tbl_prestadores 
                 SET taxa_urgencia = ?, 
                 percentagem_desconto = ?, 
@@ -79,7 +79,7 @@ export const PrestadorModel = {
                 ]
             )
             console.log({ rows })
-            return rows as PrestadorDBType[]
+            return rows as PrestadorDBType
         } catch (err) {
             console.log(err)
             return null

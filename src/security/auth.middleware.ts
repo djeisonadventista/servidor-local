@@ -14,14 +14,14 @@ declare global {
 }
 
 export default function AuthMiddleware(req: Request, res: Response, next: NextFunction) {
-const authHeader = req.headers.authorization;
-// "Bearer", "qwertyuioplkjhgfdsazxcvbnm"
+    const authHeader = req.headers.authorization;
+    // "Bearer", "qwertyuioplkjhgfdsazxcvbnm"
 
     if (!authHeader) {
         return res.status(401).json({
             status: "error",
             message: "Utilizador nao autenticado",
-            
+
         });
     }
     const token = authHeader.split(" ")[1];
@@ -42,23 +42,23 @@ const authHeader = req.headers.authorization;
         return res.status(401).json({
             status: "error",
             message: "Token inválido",
-        
+
         });
     }
 }
 
-    export function authorize(roles: string[]) {
-        return (req: Request, res: Response, next: NextFunction) => {
-            if (!req.user) {
-                return res.status(401).json({ message: "Utilizador nao autenticado" })
-            }
-if (!roles.includes(req.user.role)) {
-                return res.status(403).json({ message: "Permissao insuficiente"});
-            }
-
-            next();
+export function authorize(roles: string[]) {
+    return (req: Request, res: Response, next: NextFunction) => {
+        if (!req.user) {
+            return res.status(401).json({ message: "Utilizador nao autenticado" })
         }
+        if (!roles.includes(req.user.role)) {
+            return res.status(403).json({ message: "Permissao insuficiente" });
+        }
+
+        next();
     }
+}
 
 
 /*

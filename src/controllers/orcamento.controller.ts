@@ -123,7 +123,7 @@ export const OrcamentoController = {
             return res.status(400).json(response)
         }
 
-        const response: ResponseType<OrcamentoDBType>= {
+        const response: ResponseType<OrcamentoDBType> = {
             status: "success",
             message: "Orcamento atualizado com sucesso",
             data: updateOrcamentoResponse
@@ -152,13 +152,13 @@ export const OrcamentoController = {
 
         if (!prestacaoServico) {
             const response: ResponseType<null> = {
-            
+
                 status: "error",
                 message: "Nenhuma prestação de serviço encontrada",
                 data: null
             };
-        return res.status(404).json(response);
-    }
+            return res.status(404).json(response);
+        }
 
 
         //fetch all proposal
@@ -249,7 +249,7 @@ export const OrcamentoController = {
 
         if (!deleteOrcamentoResponse) {
             const response: ResponseType<null> = {
-                status: "error", 
+                status: "error",
                 message: "Erro ao apagar orçamento",
                 data: null
             }
@@ -262,5 +262,5 @@ export const OrcamentoController = {
             data: deleteOrcamentoResponse
         };
         return res.status(200).json(response);
-}
+    }
 }

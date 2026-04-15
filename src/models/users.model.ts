@@ -71,7 +71,7 @@ export const UsersModel = {
 
     async getById(id: string): Promise<UserDBType | null> {
         try {
-            const [rows] = await db.execute(
+            const [rows] = await db.execute<UserDBType & RowDataPacket[]>(
                 `SELECT * FROM tbl_utilizadores WHERE tbl_utilizadores.id = ?`, [id]
 
             )
@@ -143,7 +143,7 @@ export const UsersModel = {
         }
     },
 
-    async update(id: string, updatedUser: userType) {
+    async update(id: string, updatedUser: userType):Promise<UserDBType | null> {
         try {
 
             const query = `
@@ -176,9 +176,9 @@ export const UsersModel = {
                 id
             ];
 
-            const rows = await db.execute(query, values);
+            const [rows] = await db.execute<UserDBType & RowDataPacket[]>(query, values);
 
-            return rows;
+            return  rows as UserDBType;
 
         } catch (error) {
             console.log(error);

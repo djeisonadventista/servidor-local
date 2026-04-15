@@ -61,7 +61,7 @@ export const ServiceModel = {
         }
     },
 
-    async update(id: string, servicoAtualizado: ServiceDBType) {
+    async update(id: string, servicoAtualizado: ServiceDBType):Promise<ServiceDBType | null> {
         try {
             const query = `UPDATE tbl_servicos
         SET
@@ -82,9 +82,9 @@ export const ServiceModel = {
                 new Date(),
                 id
             ]
-            const rows = await db.execute<ServiceDBType & RowDataPacket[]>(query, values)
+            const [rows] = await db.execute<ServiceDBType & RowDataPacket[]>(query, values)
 
-            return rows as ServiceDBType[] 
+            return rows as ServiceDBType
         } catch (error) {
             console.log(error);
             return null

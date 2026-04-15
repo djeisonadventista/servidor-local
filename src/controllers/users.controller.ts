@@ -1,7 +1,6 @@
 import { type Request, type Response } from "express";
-import { createUser, getUserById, getUsers } from "../users.js";
 import { UsersModel } from "../models/users.model.js";
-import type { PropostaDBType, ResponseType, UserDBType, userType } from "../utils/types.js";
+import type { ResponseType, UserDBType, userType } from "../utils/types.js";
 import { comparePassword, hashPassword } from "../utils/password.js";
 import jwt from "jsonwebtoken";
 
@@ -66,7 +65,7 @@ export const UsersController = {
                 return res.status(400).json(response);
             }
 
-            const getUserByIdResponse = await getUserById(id as string);
+            const getUserByIdResponse = await UsersModel.getById(id as string);
 
             if (!getUserByIdResponse) {
                 const response: ResponseType<null> = {
@@ -149,16 +148,16 @@ export const UsersController = {
             { expiresIn: "1h" }
         );
 
-        const response: ResponseType<UserDBType> = {
+        const response: ResponseType<{token: string, user: typeof payload}>= {
             status: "success",
             message: "Login bem-sucedido",
             data: {
                 token,
                 user: payload,
             },
-            return res.status(200).json(response)
-        }
-    },
+        } 
+        return res.status(200).json(response)
+    }, 
 
     async updatePassword(req: any, res: Response) {
 
@@ -254,7 +253,7 @@ export const UsersController = {
 
 
     //  Atualizar utilizador
-    async update(req: Request, res: Response){
+    async update(req: Request, res: Response) {
         const { id } = req.params;
         const updatedUser: userType = req.body;
 

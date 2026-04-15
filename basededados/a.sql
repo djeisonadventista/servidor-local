@@ -129,6 +129,15 @@ FOREIGN KEY (id_prestacao_servico)
 REFERENCES tbl_prestacao_servico(id)
 ;
 
+ALTER TABLE tbl_prestadores
+ADD COLUMN id_empresa INTEGER,
+ADD CONSTRAINT fk_empresa_prestadores
+FOREIGN KEY (id_empresa)
+REFERENCES tbl_empresa(id)
+;
+
+ 
+
 AlTER TABLE tbl_prestacao_servico
 ADD CONSTRAINT fk_prestadores_prestacao_servico
 FOREIGN KEY (id_prestador)
@@ -149,3 +158,7 @@ CREATE TABLE tbl_servicos (
 `created_at` DATETIME NOT NULL,
 `updated_at` DATETIME NOT NULL
 );
+
+ALTER TABLE tbl_utilizadores
+ADD COLUMN `role` ENUM("cliente", "admin", "prestador", "empresa") default "cliente"
+;
