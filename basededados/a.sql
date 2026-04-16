@@ -105,6 +105,13 @@ created_at DATETIME NOT NULL,
 updated_at DATETIME NOT NULL
 );
 
+ALTER TABLE  tbl_prestadores
+ADD COLUMN id_utilizador VARCHAR(255) NOT NULL DEFAULT "4d540255-0d28-4a45-af49-5b089daefc47" AFTER id_empresa,
+ADD CONSTRAINT fk_utilizadores_prestadores
+FOREIGN KEY (id_utilizador)
+REFERENCES tbl_utilizadores(id)
+;
+
 ALTER TABLE tbl_empresa
 ADD CONSTRAINT fk_utilizador_empresa
 FOREIGN KEY (id_utilizador)

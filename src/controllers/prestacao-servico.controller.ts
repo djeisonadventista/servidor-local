@@ -1,5 +1,5 @@
 import type { Request, Response } from "express"
-import type { PrestacaoServicoDBType, PrestacaoServicoDetalhadoType, ResponseType } from "../utils/types.js"
+import type { PrestacaoServicoDBType, PrestacaoServicoByCategoriaType, ResponseType } from "../utils/types.js"
 import { PrestacaoServicoModel } from "../models/prestacao-servico.model.js"
 
 export const PrestacaoServicoController = {
@@ -157,7 +157,7 @@ export const PrestacaoServicoController = {
     },
 
     async getAllPrestacaoServicoDetalhado(req: Request, res: Response) {
-        const { limit, offset } = req.query as { limit?: string, offset?: string }
+        const { limit, offset, categoria } = req.query as { limit?: string, offset?: string, categoria?: string }
 
         let LIMIT = 10
         let OFFSET = 0
@@ -166,21 +166,30 @@ export const PrestacaoServicoController = {
 
         if (offset && parseInt(offset) > 0) OFFSET = parseInt(offset)
 
-        const getAllPestacaoServicoResponse = await PrestacaoServicoModel.getAllPrestacaoServicoDetalhado(LIMIT, OFFSET)
+            if (!categoria) {
+                const response: ResponseType<null> = {
+                    status: "error",
+                    message: "Categoria obrigatoria",
+                    data: null
+                };
+                return res.status(400).json(response);
+            }
 
-        if (!getAllPestacaoServicoResponse) {
+        const getAllPrestacaoServicoByCategoriaDetalhadoResponse = await PrestacaoServicoModel.getAllPrestacaoServicoByCategoriaDetalhado(categoria as string, LIMIT, OFFSET)
+
+        if (!getAllPrestacaoServicoByCategoriaDetalhadoResponse) {
             const response: ResponseType<null> = {
                 status: "error",
-                message: "Erro ao buscar prestacoes de servico",
+                message: "Prestacao de servico nao encontrada",
                 data: null
             };
-            return res.status(500).json(response);
+            return res.status(404).json(response);
         }
 
-        const response: ResponseType<PrestacaoServicoDetalhadoType[]> = {
+        const response: ResponseType<PrestacaoServicoByCategoriaType[]> = {
             status: "success",
-            message: "Prestacoes de servico detalhadas buscadas com sucesso",
-            data: getAllPestacaoServicoResponse
+            message: "Prestacao de servico detalhada buscada com sucesso",
+            data: getAllPrestacaoServicoByCategoriaDetalhadoResponse
         };
         return res.status(200).json(response);
 

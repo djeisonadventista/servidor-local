@@ -179,3 +179,46 @@ paths:
               schemas:
                 type: object
                 $ref: "#/componentes/schemas/Prestacao-servicoDetalhadoResponseError"
+  /prestacao-servico/get-all-by-categoria-detalhado/{id_categoria}:
+    get:
+      summary: Buscar prestacao-servico por categoria
+      tags:
+        - prestacao-servico
+      parameters:
+        - name: categoria
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "1"
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: string
+            example: "10"
+        - name: offset
+          in: query
+          required: false
+          schema: 
+            example: "0"
+      responses:
+        "200":
+          description: Prestacao de servico por categoria encontrado com sucesso
+          content:
+            application/json:
+              schema:
+                  $ref: "#/componentes/schemas/Prestacao-servicoByCategoriaDetalhadoResponseSucess"
+        "400":
+          description: "Dados de prestacao de servico por categoria invalido"
+          content:
+            application/json:
+              schemas:
+                $ref: "#/componentes/schemas/Prestacao-servicoByCategoriaDetalhadoResponseError"
+        "500":
+          description: "Erro ao buscar Prestacao de servico detalhado por categoria"
+          content:
+            application/json:
+              schemas:
+                type: object
+                $ref: "#/componentes/schemas/Prestacao-servicoByCategoriaDetalhadoResponseError"

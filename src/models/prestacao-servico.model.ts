@@ -1,6 +1,6 @@
 import type { RowDataPacket } from "mysql2"
 import db from "../lib/db.js"
-import { type PrestacaoServicoDetalhadoType, type PrestacaoServicoDBType } from "../utils/types.js"
+import { type PrestacaoServicoDetalhadoType, type PrestacaoServicoDBType, type PrestacaoServicoByCategoriaType } from "../utils/types.js"
 import { generateUUID } from "../utils/uuid.js"
 import { ca } from "date-fns/locale"
 
@@ -162,5 +162,39 @@ export const PrestacaoServicoModel = {
         }
     },
     
+async getAllPrestacaoServicoByCategoriaDetalhado(idCategoria: string, limit: number, offset: number) : Promise<PrestacaoServicoByCategoriaType[] | null> {
+        try {
+            const query = `
+            SELECT 
+            ps.id  as id.prestacao_servico, 
+            ps.designacao as descricao,
+            u.nome as nome_servico,
+            c.designacao as nome_categoria,
+            c.icone as icone_categoria,
+            ps.created_at as data_pedido,
+            ps.urgente 
+            FROM tbl_prestacao_servico ps
+            INNER JOIN tbl_categoria c ON c.id = s.id_categoria AND c.id = ?
+            INNER JOIN tbl_servicos s ON ps.id_servico = s.id
+            ORDER BY ps.created_at DESC
+            LIMIT ? OFFSET ?;
+            `
+            const [rows] = await db.execute<PrestacaoServicoByCategoriaType[] & RowDataPacket[]>(
+                query,
+                [
+                    idCategoria,
+                    limit.toString(),
+                    offset.toString()
+                ]
+            )
+
+            if (Array.isArray(rows) && rows.length === 0) return null
+            return Array.isArray(rows) ? rows as PrestacaoServicoByCategoriaType[] : null
+        } catch (error) {
+            console.log(error)
+            return null
+        }
+    },
+
 
 }
