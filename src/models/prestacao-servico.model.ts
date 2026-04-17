@@ -60,7 +60,7 @@ export const PrestacaoServicoModel = {
 
     async update(id: string, prestacaoServico: PrestacaoServicoDBType) {
         try {
-            const [rows] = await db.execute(
+            const [rows] = await db.execute<PrestacaoServicoDBType & RowDataPacket[]>(
                 `UPDATE tbl_prestacao_servico 
                 SET designacao = ?, 
                 subtotal = ?, 
@@ -89,7 +89,7 @@ export const PrestacaoServicoModel = {
                 ]
             )
             console.log({ rows })
-            return rows as PrestacaoServicoDBType[]
+            return rows as PrestacaoServicoDBType
         } catch (err) {
             console.log(err)
             return null

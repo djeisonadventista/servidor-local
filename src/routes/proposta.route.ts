@@ -7,7 +7,7 @@ import { PropostaModel } from "../models/proposta.model.js"
 
 const PropostaRoute = {
 create: "/create",
-getAll: "/getAll",
+getAll: "/",
 getById: "/get/:id",
 update: "/update/:id",
 delete: "/delete/:id",

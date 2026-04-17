@@ -132,6 +132,7 @@ export interface PropostaDBType {
     preco_hora: number,
     horas_estimadas: number,
     estado: string,
+    owner: string,
     enabled: boolean,
     created_at: string,
     updated_at: string
@@ -213,7 +214,7 @@ export interface EmpresaDBType {
     id: string;
     designacao: string;
     descricao: string;
-    localicacao: string;
+    localizacao: string;
     nif: string;
     icone: string;
     id_utilizador: string;

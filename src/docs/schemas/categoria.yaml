@@ -1,0 +1,63 @@
+# schemas/categoria.yaml
+#id: string;
+#designacao: string;
+#icone: string;
+#created_at: string;
+#updated_at: string;
+
+components:
+  schemas:
+    Categoria:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        designacao:
+          type: string
+          example: "Limpeza"
+        icone:
+          type: string
+          example: "https://example.com/icon-categoria.png"
+        created_at:
+          type: string
+          example: "2026-04-17T12:00:00.000Z"
+        updated_at:
+          type: string
+          example: "2026-04-17T12:00:00.000Z"
+
+    CreateCategoria:
+      type: object
+      properties:
+        designacao:
+          type: string
+          example: "Limpeza"
+        icone:
+          type: string
+          example: "https://example.com/icon-categoria.png"
+
+    CategoriaResponseSucess:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Categoria processada com sucesso"
+        data:
+          $ref: "#/components/schemas/Categoria"
+
+    CategoriaResponseError:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: "Erro ao processar a categoria"
+        data:
+          type: object
+          properties:
+            null: {}

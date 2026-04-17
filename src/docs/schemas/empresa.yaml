@@ -1,0 +1,99 @@
+# schemas/empresa.yaml
+#id: string;
+#designacao: string;
+#descricao: string;
+#localizacao: string;
+#nif: string;
+#icone: string;
+#id_utilizador: string;
+#enabled: boolean;
+#created_at: string;
+#updated_at: string;
+
+components:
+  schemas:
+    Empresa:
+    # schema principal de empresa
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        designacao:
+          type: string
+          example: "Empresa de Limpeza"
+        descricao:
+          type: string
+          example: "Empresa especializada em limpeza residencial e comercial"
+        localizacao:
+          type: string
+          example: "Lisboa, Portugal"
+        nif:
+          type: number
+          example: 123456789
+        icone:
+          type: string
+          example: "https://example.com/icon.png"
+        id_utilizador:
+          type: string
+          example: "4d540255-0d28-4a45-af49-5b089daefc47"
+        enabled:
+          type: boolean
+          example: true
+        created_at:
+          type: string
+          example: "2026-04-17T12:00:00.000Z"
+        updated_at:
+          type: string
+          example: "2026-04-17T12:00:00.000Z"
+
+    CreateEmpresa:
+      type: object
+      properties:
+        designacao:
+          type: string
+          example: "Empresa de Limpeza"
+        descricao:
+          type: string
+          example: "Empresa especializada em limpeza residencial e comercial"
+        localizacao:
+          type: string
+          example: "Lisboa, Portugal"
+        nif:
+          type: number
+          example: 123456789
+        icone:
+          type: string
+          example: "https://example.com/icon.png"
+        id_utilizador:
+          type: string
+          example: "4d540255-0d28-4a45-af49-5b089daefc47"
+        enabled:
+          type: boolean
+          example: true
+
+    EmpresaResponseSucess:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Empresa criada com sucesso"
+        data:
+          $ref: "#/components/schemas/Empresa"
+
+    EmpresaResponseError:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: "Erro ao processar a empresa"
+        data:
+          type: object
+          properties:
+            null: {}

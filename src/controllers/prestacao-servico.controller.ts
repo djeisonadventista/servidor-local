@@ -93,36 +93,42 @@ export const PrestacaoServicoController = {
         const updatedPrestacaoServico: PrestacaoServicoDBType = req.body
 
         if (!id) {
-            return res.status(400).json({
+const response: ResponseType<null> = {
                 status: "error",
                 message: "ID obrigatorio",
                 data: null
-            })
+            }
+            return res.status(400).json(response)
         }
 
         if (!updatedPrestacaoServico) {
-            return res.status(400).json({
+
+            const response: ResponseType<null> = {
                 status: "error",
                 message: "Dados de prestacao de servico invalidos",
                 data: null
-            })
+            }
+            return res.status(400).json(response)
         }
 
         const updatePrestacaoServicoResponse = await PrestacaoServicoModel.update(id as string, updatedPrestacaoServico)
 
         if (!updatePrestacaoServicoResponse) {
-            return res.status(400).json({
+
+const response: ResponseType<null> = {
                 status: "error",
                 message: "Erro ao atualizar prestacao de servico",
                 data: null
-            })
+            }
+            return res.status(400).json(response)
         }
 
-        return res.status(200).json({
+const response: ResponseType<PrestacaoServicoDBType> = {
             status: "success",
             message: "Prestacao de servico atualizada com sucesso",
             data: updatePrestacaoServicoResponse
-        })
+        }
+        return res.status(200).json(response)
     },
 
     async delete(req: Request, res: Response) {
