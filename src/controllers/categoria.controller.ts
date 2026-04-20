@@ -1,7 +1,8 @@
 import type { Request, Response } from "express";
 import type { CategoriaDBType, ResponseType } from "../utils/types.js";
 import { CategoriaModel } from "../models/categoria.model.js";
-
+import jwt from "jsonwebtoken";
+ 
 export const CategoriaController = {
     async create(req: Request, res: Response) {
         const categoria: CategoriaDBType = req.body;

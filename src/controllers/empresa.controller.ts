@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import type { EmpresaDBType, ResponseType } from "../utils/types.js";
 import { EmpresaModel } from "../models/empresa.model.js";
+import jwt from "jsonwebtoken";
 
 export const EmpresaController = {
     async create(req: Request, res: Response) {
