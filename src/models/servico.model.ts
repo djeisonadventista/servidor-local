@@ -4,7 +4,7 @@ import type { ServiceDBType, ServicoDetalhadoType } from "../utils/types.js"
 
 
 export const ServiceModel = {
-    async Create(newService: ServiceDBType): Promise<ServiceDBType | null> {
+    async create(newService: ServiceDBType): Promise<ServiceDBType | null> {
 
         try {
 

@@ -58,6 +58,7 @@ export interface userType {
     telefone: string;
     pais: string;
     localidade: string;
+    role: Role;
     enebled: boolean;
     created_at: Date;
     update_at: Date;
