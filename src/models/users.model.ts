@@ -7,7 +7,7 @@ import type { RowDataPacket } from "mysql2";
 
 export const UsersModel = {
 
-    async create(newUser: userType) {
+    async create(newUser: userType): Promise<UserDBType | null> {
         try {
 
             const [rows] = await db.execute<UserDBType & RowDataPacket[]>(`

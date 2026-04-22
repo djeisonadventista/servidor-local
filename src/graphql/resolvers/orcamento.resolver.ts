@@ -1,5 +1,6 @@
 
 import {OrcamentoModel} from "../../models/orcamento.model.js";
+import { UsersModel } from "../../models/users.model.js";
 import type { OrcamentoDBType } from "../../utils/types.js";
 
 export const orcamentoResolver = {
@@ -21,6 +22,13 @@ export const orcamentoResolver = {
         },
         deleteOrcamento: async (_: any, args: { id: string }) => {
             return await OrcamentoModel.delete(args.id);
+        }
+    },
+
+    // Relacionamento entre Orcamento e Utilizador
+    Orcamento: {
+        users: async (parent: { id_utilizadores: string }) => {
+            return await UsersModel.get(parent.id_utilizadores);
         }
     }
 }

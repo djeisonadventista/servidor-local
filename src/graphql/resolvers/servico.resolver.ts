@@ -1,6 +1,7 @@
 
-import {ServiceModel} from "../../models/servico.model.js";
+import { ServiceModel } from "../../models/servico.model.js";
 import type { ServiceDBType } from "../../utils/types.js";
+import { CategoriaModel } from "../../models/categoria.model.js";
 
 export const serviceResolver = {
     Query: {
@@ -13,14 +14,21 @@ export const serviceResolver = {
         }
     },
     Mutation: {
-     createService: async (_: any, args: { service: ServiceDBType }) => {
-                 return await ServiceModel.create(args.service);
-             },
+        createService: async (_: any, args: { service: ServiceDBType }) => {
+            return await ServiceModel.create(args.service);
+        },
         updateService: async (_: any, args: { id: string, service: ServiceDBType }) => {
             return await ServiceModel.update(args.id, args.service);
         },
         deleteService: async (_: any, args: { id: string }) => {
             return await ServiceModel.delete(args.id);
+        },
+    },
+
+    // Relacionamento entre Service e Categoria
+    Service: {
+        categoria: async (parent: { id: string }) => {
+            return await CategoriaModel.get(parent.id);
         }
     }
 }
