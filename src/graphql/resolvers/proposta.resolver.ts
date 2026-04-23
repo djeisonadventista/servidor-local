@@ -1,8 +1,8 @@
 
 import { PrestacaoServicoModel } from "../../models/prestacao-servico.model.js";
 import { PrestadorModel } from "../../models/prestador.model.js";
-import {PropostaModel} from "../../models/proposta.model.js";
-import type { PropostaDBType,} from "../../utils/types.js";
+import { PropostaModel } from "../../models/proposta.model.js";
+import type { PropostaDBType, } from "../../utils/types.js";
 
 export const propostaResolver = {
     Query: {
@@ -26,13 +26,13 @@ export const propostaResolver = {
         }
     },
 
-        // Relacionamento entre Proposta e Prestador e PrestacaoServico
+    // Relacionamento entre Proposta e Prestador e PrestacaoServico
     Proposta: {
-     prestador: async (parent: {id_prestador: string}) => {   
-        return await PrestadorModel.get(parent.id_prestador);
-     },
-     prestacaoServico: async (parent: {id_prestacao_servico: string}) => {
-        return await PrestacaoServicoModel.get(parent.id_prestacao_servico);
-     }      
+        prestador: async (parent: { id_prestador: string }) => {
+            return await PrestadorModel.get(parent.id_prestador);
+        },
+        prestacaoServico: async (parent: { id_prestacao_servico: string }) => {
+            return await PrestacaoServicoModel.get(parent.id_prestacao_servico);
+        }
     }
 }

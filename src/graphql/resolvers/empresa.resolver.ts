@@ -5,7 +5,7 @@ import type { EmpresaDBType } from "../../utils/types.js";
 
 export const empresaResolver = {
     Query: {
-        getAllEmpresas: async () => {
+        getAllEmpresa: async () => {
             return await EmpresaModel.getAll();
         },
 
@@ -28,7 +28,7 @@ export const empresaResolver = {
     // Relacionamento entre Empresa e Utilizador
 
         Empresa: {
-            users: async (parent: { id_utilizadores: string }) => {
+            utilizadores: async (parent: { id_utilizadores: string }) => {
                         return await UsersModel.get(parent.id_utilizadores);
                     }
 }

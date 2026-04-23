@@ -27,7 +27,7 @@ export const orcamentoResolver = {
 
     // Relacionamento entre Orcamento e Utilizador
     Orcamento: {
-        users: async (parent: { id_utilizadores: string }) => {
+        utilizador: async (parent: { id_utilizadores: string }) => {
             return await UsersModel.get(parent.id_utilizadores);
         }
     }

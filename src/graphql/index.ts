@@ -9,7 +9,7 @@ import { categoriaResolver } from "./resolvers/categoria.resolver.js";
 import { propostaResolver } from "./resolvers/proposta.resolver.js";
 
 export const resolvers = {
-    query: {
+    Query: {
         ...usersResolver.Query,
         ...serviceResolver.Query,
         ...propostaResolver.Query,
@@ -21,7 +21,7 @@ export const resolvers = {
 
 
     },
-    mutation: {
+    Mutation: {
         ...usersResolver.Mutation,
         ...serviceResolver.Mutation,
         ...propostaResolver.Mutation,

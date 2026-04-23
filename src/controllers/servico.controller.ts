@@ -18,7 +18,7 @@ export const ServicoController = {
             return res.status(400).json(response);
         }
 
-        const createServiceResponse: ServiceDBType | null = await ServiceModel.Create(newService);
+        const createServiceResponse: ServiceDBType | null = await ServiceModel.create(newService);
 
         if (!createServiceResponse === null) {
             const response: ResponseType<null> = {

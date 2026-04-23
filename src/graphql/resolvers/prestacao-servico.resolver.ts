@@ -29,13 +29,13 @@ export const prestacaoServicoResolver = {
         }
     },
 
-    // Relacionamento entre Service e Categoria
+    // Relacionamento entre PrestacaoServico, prestador, utilizador,  Service, orcamento e empresa
     PrestacaoServico: {
         prestador: async (parent: { id: string }) => {
             return await PrestadorModel.get(parent.id);
         },
 
-        users: async (parent: { id: string }) => {
+        utilizador: async (parent: { id: string }) => {
             return await UsersModel.get(parent.id);
         },
 

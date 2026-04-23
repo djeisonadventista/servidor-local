@@ -26,7 +26,7 @@ export const serviceResolver = {
     },
 
     // Relacionamento entre Service e Categoria
-    Service: {
+    Servico: {
         categoria: async (parent: { id: string }) => {
             return await CategoriaModel.get(parent.id);
         }
