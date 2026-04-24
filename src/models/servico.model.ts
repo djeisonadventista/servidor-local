@@ -21,6 +21,7 @@ export const ServiceModel = {
             ]
             const [rows] = await db.execute<ServiceDBType & RowDataPacket[]>(query, values)
 
+
             return rows as ServiceDBType
         } catch (error) {
             console.log(error);

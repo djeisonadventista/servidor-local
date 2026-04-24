@@ -188,4 +188,3 @@ type Mutation {
     deleteCategoria(id: ID!): Categoria
 }
     `
-     
