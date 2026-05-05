@@ -12,8 +12,8 @@ export const UsersModel = {
 
             const [rows] = await db.execute<UserDBType & RowDataPacket[]>(`
             INSERT INTO tbl_utilizadores
-            (id, nome, numero_identidade, data_nascimento, email, password, telefone, pais, localidade, enebled, created_at, update_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            (id, nome, numero_identidade, data_nascimento, email, password, telefone, pais, localidade, role, enebled, created_at, update_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [
                     generateUUID(),
                     newUser.nome,
@@ -24,6 +24,7 @@ export const UsersModel = {
                     newUser.telefone,
                     newUser.pais,
                     newUser.localidade,
+                    newUser.role,
                     newUser.enebled,
                     new Date(),
                     new Date()
