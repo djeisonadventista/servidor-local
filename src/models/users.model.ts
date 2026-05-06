@@ -7,7 +7,20 @@ import type { RowDataPacket } from "mysql2";
 
 export const UsersModel = {
 
-    async create(newUser: userType): Promise<UserDBType | null> {
+    async create(User: userType): Promise<UserDBType | null> {
+       console.log({User})
+       console.log( User.nome,
+                    User.numero_identidade,
+                    formatDateDDMMYYYY(User.data_nascimento),
+                    User.email,
+                    await hashPassword(User.password),
+                    User.telefone,
+                    User.pais,
+                    User.localidade,
+                    User.role || "cliente",
+                    User.enebled ?? true,
+                    new Date(),
+                    new Date())
         try {
 
             const [rows] = await db.execute<UserDBType & RowDataPacket[]>(`
@@ -16,16 +29,16 @@ export const UsersModel = {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [
                     generateUUID(),
-                    newUser.nome,
-                    newUser.numero_identidade,
-                    formatDateDDMMYYYY(newUser.data_nascimento),
-                    newUser.email,
-                    await hashPassword(newUser.password),
-                    newUser.telefone,
-                    newUser.pais,
-                    newUser.localidade,
-                    newUser.role,
-                    newUser.enebled,
+                    User.nome,
+                    User.numero_identidade,
+                    formatDateDDMMYYYY(User.data_nascimento),
+                    User.email,
+                    await hashPassword(User.password),
+                    User.telefone,
+                    User.pais,
+                    User.localidade,
+                    User.role || "cliente",
+                    User.enebled ?? true,
                     new Date(),
                     new Date()
                 ]

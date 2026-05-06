@@ -26,7 +26,7 @@ export const UsersController = {
             message: "Utilizador criado com sucesso!",
             data: createUserResponse,
         };
-        return res.status(201).json(response);
+        return res.status(200).json(response);
     },
 
     //  Buscar todos utilizadores
