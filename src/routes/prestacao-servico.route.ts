@@ -19,7 +19,7 @@ router.get(PrestacaoServicoRoute.getAllPrestacaoServicoDetalhado, authorize([Rol
 
 router.use(AuthMiddleware);
 
-router.post(PrestacaoServicoRoute.create, authorize([Role.PRESTADOR, Role.EMPRESA]), PrestacaoServicoController.create)
+router.post(PrestacaoServicoRoute.create, authorize([Role.PRESTADOR, Role.EMPRESA,]), PrestacaoServicoController.create)
 router.put(PrestacaoServicoRoute.update, authorize([Role.ADMIN, Role.PRESTADOR, Role.EMPRESA]), PrestacaoServicoController.update)
 router.delete(PrestacaoServicoRoute.delete,  authorize([Role.ADMIN]), PrestacaoServicoController.delete)
 

@@ -1,5 +1,6 @@
-import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import type { Request, Response, NextFunction } from "express";
+
 
 declare global {
     namespace Express {
@@ -18,6 +19,7 @@ export default function AuthMiddleware(req: Request, res: Response, next: NextFu
     // "Bearer", "qwertyuioplkjhgfdsazxcvbnm"
 
     if (!authHeader) {
+
         return res.status(401).json({
             status: "error",
             message: "Utilizador nao autenticado",

@@ -35,7 +35,7 @@ export const OrcamentoController = {
             message: "Orcamento criado com sucesso",
             data: createOrcamentoResponse
         };
-        return res.status(201).json(response);
+        return res.status(200).json(response);
     },
 
     async getAll(req: Request, res: Response) {

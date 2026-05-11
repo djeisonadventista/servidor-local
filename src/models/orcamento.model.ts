@@ -8,11 +8,10 @@ export const OrcamentoModel = {
     async create(orcamento: OrcamentoDBType): Promise<OrcamentoDBType | null> {
         try {
             const [rows] = await db.execute<OrcamentoDBType & RowDataPacket[]>(
-                `INSERT INTO tbl_orcamento
-                VALUES (?, ?, ?, ?, ?, ?)`,
+                `INSERT INTO tbl_orcamento (total, id_utilizadores, enabled, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?)`,
 
                 [
-                    generateUUID(),
                     orcamento.total,
                     orcamento.id_utilizadores,
                     orcamento.enabled,

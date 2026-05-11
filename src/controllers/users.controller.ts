@@ -145,7 +145,7 @@ export const UsersController = {
         const token = jwt.sign(
             payload,
             process.env.JWT_SECRET as string,
-            { expiresIn: "1h" }
+            { expiresIn: "7d" }
         );
 
         const response: ResponseType<{token: string, user: typeof payload}>= {

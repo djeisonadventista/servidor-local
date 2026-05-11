@@ -2,7 +2,6 @@ import type { RowDataPacket } from "mysql2"
 import db from "../lib/db.js"
 import { type PrestacaoServicoDetalhadoType, type PrestacaoServicoDBType, type PrestacaoServicoByCategoriaType } from "../utils/types.js"
 import { generateUUID } from "../utils/uuid.js"
-import { ca } from "date-fns/locale"
 
 
 export const PrestacaoServicoModel = {
