@@ -7,12 +7,13 @@ import { generateUUID } from "../utils/uuid.js"
 export const PrestacaoServicoModel = {
     async create(prestacaoServico: PrestacaoServicoDBType): Promise<PrestacaoServicoDBType | null> {
         try {
+            console.log({ prestacaoServico })
             const [rows] = await db.execute<PrestacaoServicoDBType & RowDataPacket []>(
                 `INSERT INTO tbl_prestacao_servico 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 
                 [
-                    generateUUID(),
+                    null,
                     prestacaoServico.designacao,
                     prestacaoServico.subtotal,
                     prestacaoServico.horas_estimadas,
@@ -20,10 +21,14 @@ export const PrestacaoServicoModel = {
                     prestacaoServico.id_servico,
                     prestacaoServico.preco_hora,
                     prestacaoServico.estado,
+
                     prestacaoServico.id_orcamento,
+                    prestacaoServico.urgente,
                     prestacaoServico.enabled,
                     new Date(),
-                    new Date()
+                    new Date(),
+                    prestacaoServico.id_empresa,
+                    prestacaoServico.tipo_prestador,
                 ]
             )
             console.log({ rows })

@@ -2,16 +2,18 @@ import type { RowDataPacket } from "mysql2"
 import db from "../lib/db.js"
 import type { OrcamentoDBType } from "../utils/types.js"
 import { generateUUID } from "../utils/uuid.js"
+import type { info } from "node:console";
 
 
 export const OrcamentoModel = {
     async create(orcamento: OrcamentoDBType): Promise<OrcamentoDBType | null> {
         try {
             const [rows] = await db.execute<OrcamentoDBType & RowDataPacket[]>(
-                `INSERT INTO tbl_orcamento (total, id_utilizadores, enabled, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?)`,
+                `INSERT INTO tbl_orcamento
+                VALUES (?, ?, ?, ?, ?, ?)`,
 
                 [
+                    null,
                     orcamento.total,
                     orcamento.id_utilizadores,
                     orcamento.enabled,
@@ -19,8 +21,12 @@ export const OrcamentoModel = {
                     new Date()
                 ]
             )
-            console.log({ rows })
-            return rows as OrcamentoDBType
+
+const [newOrcamento] = await db.execute<OrcamentoDBType & RowDataPacket[]>(
+                `SELECT * FROM tbl_orcamento ORDER BY id DESC LIMIT 1`,
+            )
+
+return Array.isArray(newOrcamento) && newOrcamento.length > 0 ? newOrcamento[0] as OrcamentoDBType : null
         } catch (err) {
             console.log(err)
             return null
